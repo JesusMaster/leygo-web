@@ -332,7 +332,7 @@
       <div class="instalar-dentro">
         <div class="instalar-cabeza">
           <h2 id="t-instalar">Instalar</h2>
-          <p>Necesitas Docker, Node.js 22, un Redis, un Qdrant y la clave de algún proveedor de modelos. Con Gemini basta para empezar.</p>
+          <p>Necesitas un servidor con Docker y la clave de algún proveedor de modelos (con Gemini basta para empezar). Redis y Qdrant pueden correr en el mismo Docker o en su capa gratis en la nube.</p>
         </div>
         <ol class="pasos">
           <li>
@@ -341,20 +341,19 @@
 cd leygo-agent</code></pre><button class="copiar" type="button">Copiar</button></div>
           </li>
           <li>
-            <h3>Configura tus claves</h3>
-            <p>Copia el ejemplo y completa al menos <code>GEMINI_API_KEY</code>, <code>REDIS_HOST</code> y <code>QDRANT_URL</code>. El segundo comando crea tu usuario de la interfaz: pega en <code>.env</code> la línea que imprime.</p>
-            <div class="terminal"><pre><code>cp .env.example .env
-npm install &amp;&amp; npm run gui:password</code></pre><button class="copiar" type="button">Copiar</button></div>
+            <h3>Copia la configuración de ejemplo</h3>
+            <p>No hace falta editar nada más a mano: las claves, la base de datos y las cuentas se configuran después, en el asistente.</p>
+            <div class="terminal"><pre><code>cp .env.example .env</code></pre><button class="copiar" type="button">Copiar</button></div>
           </li>
           <li>
             <h3>Apunta tu dominio y levántalo</h3>
-            <p>Un registro A hacia tu servidor. Caddy saca el certificado solo.</p>
+            <p>Un registro A hacia tu servidor. Caddy saca el certificado solo. Agrega <code>--profile local</code> si quieres Redis, Qdrant y Ollama en el mismo servidor.</p>
             <div class="terminal"><pre><code>echo "DOMAIN=agente.tudominio.cl" &gt;&gt; .env
 docker compose up -d</code></pre><button class="copiar" type="button">Copiar</button></div>
           </li>
           <li>
-            <h3>Entra y conecta lo que uses</h3>
-            <p>Abre tu dominio, inicia sesión y agrega desde Ajustes otros proveedores de modelos, Telegram o Google Workspace. Todo es opcional salvo el modelo.</p>
+            <h3>Sigue el asistente</h3>
+            <p>Abre tu dominio. Te pide el código que el servidor muestra en <code>docker compose logs agent</code> y te guía por tu cuenta, el modelo, Redis y Qdrant (en Docker, Redis Cloud o Qdrant Cloud), Google y Telegram. Al final se reinicia solo.</p>
           </li>
         </ol>
         <p class="instalar-pie">¿No tienes servidor? <a href="#local">Córrelo en tu computador con Docker</a>. ¿Lo vas a dejar en producción? La guía paso a paso para un Droplet de DigitalOcean está en <a href="https://github.com/JesusMaster/leygo-agent/blob/main/docs/DEPLOY.md">docs/DEPLOY.md</a>.</p>
@@ -414,23 +413,19 @@ docker compose up -d</code></pre><button class="copiar" type="button">Copiar</bu
       <ol class="pasos-local">
         <li>
           <h3>Levántalo en tu computador</h3>
-          <p>Descarga el código y copia la configuración de ejemplo.</p>
+          <p>El perfil <code>local</code> levanta también Redis, Qdrant y Ollama en Docker, y <code>DOMAIN=:80</code> deja la interfaz en <code>http://localhost</code>.</p>
           <div class="terminal"><pre><code>git clone https://github.com/JesusMaster/leygo-agent.git
 cd leygo-agent
-cp .env.example .env</code></pre><button class="copiar" type="button">Copiar</button></div>
-          <p class="paso-sig">Abre <code>.env</code> y cambia estas líneas. Así Redis y Qdrant corren también en Docker y la interfaz queda en <code>http://localhost</code>:</p>
-          <div class="terminal"><pre><code>GEMINI_API_KEY=tu-clave
-DOMAIN=:80
-REDIS_HOST=redis
-QDRANT_URL=http://qdrant:6333
-EMBEDDING_PROVIDER=gemini</code></pre><button class="copiar" type="button">Copiar</button></div>
-          <p class="paso-sig">Y levántalo con el perfil <code>local</code>:</p>
-          <div class="terminal"><pre><code>docker compose --profile local up -d</code></pre><button class="copiar" type="button">Copiar</button></div>
-          <p class="paso-nota">¿Sin clave de Gemini? Déjala vacía: leygo arranca igual y te avisa en el chat qué falta. Agrega otro proveedor en Ajustes y asígnalo en Modelos por agente.</p>
+cp .env.example .env
+echo "DOMAIN=:80" &gt;&gt; .env
+docker compose --profile local up -d</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <p class="paso-sig">Abre <code>http://localhost</code> y sigue el asistente. El código que te pide está en los logs:</p>
+          <div class="terminal"><pre><code>docker compose logs agent | grep -A2 "Código"</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <p class="paso-nota">En el asistente elige "En Docker" para Redis, Qdrant y los embeddings; descarga el modelo de embeddings con un botón.</p>
         </li>
         <li>
           <h3>Abre un túnel, solo si vas a usar A2A o webhooks</h3>
-          <p class="aviso-seguridad"><b>Antes de abrirlo, protege la interfaz:</b> define <code>ADMIN_API_KEY</code> en <code>.env</code> y crea tu usuario con <code>npm install &amp;&amp; npm run gui:password</code>. Sin eso, cualquiera con la URL podría entrar.</p>
+          <p class="aviso-seguridad"><b>Termina el asistente antes de abrirlo.</b> Hasta que no creas tu cuenta la administración está cerrada, pero conviene que la URL pública llegue a un leygo que ya pide contraseña.</p>
           <p class="tun-texto-cloudflared">Te da una URL <code>https://….trycloudflare.com</code> que cambia cada vez que lo inicias. Para una fija, crea un túnel con nombre en Cloudflare y apúntalo a tu dominio.</p>
           <p class="tun-texto-ngrok" hidden>Te da una URL <code>https://….ngrok-free.app</code>. Tu cuenta gratis de ngrok incluye un dominio fijo: úsalo con <code>--url</code> para que no cambie.</p>
           <div class="terminal tun-cmd-cloudflared"><pre><code>cloudflared tunnel --url http://localhost:80</code></pre><button class="copiar" type="button">Copiar</button></div>
@@ -446,6 +441,7 @@ PUBLIC_BASE_URL=https://tu-agente.trycloudflare.com</code></pre><button class="c
         <li>
           <h3>Crea un token y compártelo</h3>
           <p>En Conexiones A2A, con solo las herramientas que quieras. Quien lo use necesita tu URL y ese token.</p>
+          <p class="paso-nota">¿Conectaste Google desde <code>http://localhost</code>? Esa dirección de retorno sirve igual; si entras por la URL del túnel, agrégala también en Google Cloud.</p>
         </li>
       </ol>
       <p class="local-avisos">El túnel funciona mientras tu computador esté prendido. Y deja una sola copia de leygo encendida: si también lo tienes en un servidor, apaga una, o Telegram y las rutinas responderían dos veces.</p>
