@@ -414,15 +414,23 @@ docker compose up -d</code></pre><button class="copiar" type="button">Copiar</bu
       <ol class="pasos-local">
         <li>
           <h3>Levántalo en tu computador</h3>
-          <p>Con <code>DOMAIN=:80</code> queda en <code>http://localhost</code>, sin certificado.</p>
+          <p>Descarga el código y copia la configuración de ejemplo.</p>
           <div class="terminal"><pre><code>git clone https://github.com/JesusMaster/leygo-agent.git
 cd leygo-agent
-cp .env.example .env
-echo "DOMAIN=:80" &gt;&gt; .env
-docker compose up -d</code></pre><button class="copiar" type="button">Copiar</button></div>
+cp .env.example .env</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <p class="paso-sig">Abre <code>.env</code> y cambia estas líneas. Así Redis y Qdrant corren también en Docker y la interfaz queda en <code>http://localhost</code>:</p>
+          <div class="terminal"><pre><code>GEMINI_API_KEY=tu-clave
+DOMAIN=:80
+REDIS_HOST=redis
+QDRANT_URL=http://qdrant:6333
+EMBEDDING_PROVIDER=gemini</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <p class="paso-sig">Y levántalo con el perfil <code>local</code>:</p>
+          <div class="terminal"><pre><code>docker compose --profile local up -d</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <p class="paso-nota">¿Sin clave de Gemini? Déjala vacía: leygo arranca igual y te avisa en el chat qué falta. Agrega otro proveedor en Ajustes y asígnalo en Modelos por agente.</p>
         </li>
         <li>
           <h3>Abre un túnel, solo si vas a usar A2A o webhooks</h3>
+          <p class="aviso-seguridad"><b>Antes de abrirlo, protege la interfaz:</b> define <code>ADMIN_API_KEY</code> en <code>.env</code> y crea tu usuario con <code>npm install &amp;&amp; npm run gui:password</code>. Sin eso, cualquiera con la URL podría entrar.</p>
           <p class="tun-texto-cloudflared">Te da una URL <code>https://….trycloudflare.com</code> que cambia cada vez que lo inicias. Para una fija, crea un túnel con nombre en Cloudflare y apúntalo a tu dominio.</p>
           <p class="tun-texto-ngrok" hidden>Te da una URL <code>https://….ngrok-free.app</code>. Tu cuenta gratis de ngrok incluye un dominio fijo: úsalo con <code>--url</code> para que no cambie.</p>
           <div class="terminal tun-cmd-cloudflared"><pre><code>cloudflared tunnel --url http://localhost:80</code></pre><button class="copiar" type="button">Copiar</button></div>
