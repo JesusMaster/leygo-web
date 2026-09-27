@@ -271,7 +271,7 @@
           <li><b>Comparte la URL de tu tarjeta</b> (<code>/.well-known/agent-card.json</code>) y el token con quien lo va a usar.</li>
           <li><b>El otro agente pregunta</b> en lenguaje natural y leygo responde, sin mostrarle tu correo, tu calendario ni tu memoria privada.</li>
         </ol>
-        <p class="a2a-extra">También funciona al revés: leygo puede consultar a agentes A2A de otros, como a uno más de sus especialistas. <a href="#demo" data-ir-escena="a2a">Mira cómo responde en la demo</a>.</p>
+        <p class="a2a-extra"><b>Para que te consulten necesitas una URL pública.</b> En un servidor ya la tienes; en tu computador la abres con un túnel (<a href="#local">te mostramos cómo</a>). También funciona al revés: leygo puede consultar a agentes A2A de otros, como a uno más de sus especialistas. <a href="#demo" data-ir-escena="a2a">Mira cómo responde en la demo</a>.</p>
       </div>
       <figure class="a2a-codigo">
         <figcaption>Un agente externo le pregunta a leygo</figcaption>
@@ -357,8 +357,90 @@ docker compose up -d</code></pre><button class="copiar" type="button">Copiar</bu
             <p>Abre tu dominio, inicia sesión y agrega desde Ajustes otros proveedores de modelos, Telegram o Google Workspace. Todo es opcional salvo el modelo.</p>
           </li>
         </ol>
-        <p class="instalar-pie">¿Lo vas a dejar en producción? La guía paso a paso para un Droplet de DigitalOcean está en <a href="https://github.com/JesusMaster/leygo-agent/blob/main/docs/DEPLOY.md">docs/DEPLOY.md</a>.</p>
+        <p class="instalar-pie">¿No tienes servidor? <a href="#local">Córrelo en tu computador con Docker</a>. ¿Lo vas a dejar en producción? La guía paso a paso para un Droplet de DigitalOcean está en <a href="https://github.com/JesusMaster/leygo-agent/blob/main/docs/DEPLOY.md">docs/DEPLOY.md</a>.</p>
       </div>
+    </section>
+
+    <!-- ───────────── Local ───────────── -->
+    <section class="seccion seccion-local" id="local" aria-labelledby="t-local">
+      <div class="seccion-cabeza">
+        <h2 id="t-local">En tu computador, sin servidor</h2>
+        <p>leygo corre completo en Docker en tu propio computador. Casi todo funciona tal cual; solo lo que llega desde internet necesita una URL pública, y esa la abres con un túnel.</p>
+      </div>
+
+      <div class="tunel" id="tunel-demo">
+        <div class="tunel-barra">
+          <button type="button" class="interruptor" aria-pressed="false"><span class="int-pista"><span class="int-bola"></span></span><span class="int-texto">Túnel apagado</span></button>
+          <div class="proveedor-tunel" role="radiogroup" aria-label="Herramienta de túnel">
+            <button type="button" role="radio" aria-checked="true" data-prov="cloudflared">cloudflared</button>
+            <button type="button" role="radio" aria-checked="false" data-prov="ngrok">ngrok</button>
+          </div>
+          <button type="button" class="tun-repetir">Ver de nuevo</button>
+        </div>
+        <div class="tun-escenario" aria-hidden="true">
+          <svg class="tun-lineas"></svg>
+          <div class="tun-caja"><span class="tun-caja-titulo">Tu computador</span>
+            <div class="tnodo tn-leygo" data-t="leygo"><i></i><span>leygo<small>en Docker</small></span></div>
+          </div>
+          <div class="tnodo tn-servicios" data-t="servicios"><i></i><span>Telegram, Google<br>y los modelos</span></div>
+          <div class="tnodo tn-borde" data-t="borde"><i></i><span class="tn-borde-nombre">cloudflared</span><span class="tn-url">https://tu-agente.trycloudflare.com</span></div>
+          <div class="tnodo tn-otro" data-t="otro"><i></i><span>El leygo de Camila<small>o cualquier agente A2A</small></span></div>
+          <span class="tun-bloqueo">Sin URL pública: no te encuentra</span>
+        </div>
+        <p class="tun-nota" aria-live="polite">Telegram, Google y los modelos funcionan sin nada más: es leygo el que sale a buscarlos.</p>
+      </div>
+
+      <div class="local-columnas">
+        <div class="local-lista">
+          <h3>Funciona en tu computador, sin nada más</h3>
+          <ul class="si">
+            <li>El chat y toda la interfaz en <code>http://localhost</code></li>
+            <li>Telegram, Gmail, Calendar, Drive y Meet</li>
+            <li>Compromisos, memoria, rutinas y tus agentes</li>
+            <li>Cualquier modelo, también Ollama en tu propio equipo</li>
+            <li>Consultar a agentes A2A de otros</li>
+          </ul>
+        </div>
+        <div class="local-lista">
+          <h3>Necesita una URL pública</h3>
+          <ul class="no">
+            <li>Que otros agentes u otros leygos te consulten por A2A</li>
+            <li>Recibir webhooks de Sentry, GitHub o tu monitoreo</li>
+            <li>Los enlaces a imágenes y archivos que comparte en Google Chat o Buzz</li>
+          </ul>
+        </div>
+      </div>
+
+      <ol class="pasos-local">
+        <li>
+          <h3>Levántalo en tu computador</h3>
+          <p>Con <code>DOMAIN=:80</code> queda en <code>http://localhost</code>, sin certificado.</p>
+          <div class="terminal"><pre><code>git clone https://github.com/JesusMaster/leygo-agent.git
+cd leygo-agent
+cp .env.example .env
+echo "DOMAIN=:80" &gt;&gt; .env
+docker compose up -d</code></pre><button class="copiar" type="button">Copiar</button></div>
+        </li>
+        <li>
+          <h3>Abre un túnel, solo si vas a usar A2A o webhooks</h3>
+          <p class="tun-texto-cloudflared">Te da una URL <code>https://….trycloudflare.com</code> que cambia cada vez que lo inicias. Para una fija, crea un túnel con nombre en Cloudflare y apúntalo a tu dominio.</p>
+          <p class="tun-texto-ngrok" hidden>Te da una URL <code>https://….ngrok-free.app</code>. Tu cuenta gratis de ngrok incluye un dominio fijo: úsalo con <code>--url</code> para que no cambie.</p>
+          <div class="terminal tun-cmd-cloudflared"><pre><code>cloudflared tunnel --url http://localhost:80</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <div class="terminal tun-cmd-ngrok" hidden><pre><code>ngrok http --url=tu-agente.ngrok-free.app 80</code></pre><button class="copiar" type="button">Copiar</button></div>
+        </li>
+        <li>
+          <h3>Dile a leygo cuál es su URL pública</h3>
+          <p>Su tarjeta A2A anuncia esa dirección: si no coincide con la del túnel, los otros agentes no llegan.</p>
+          <div class="terminal"><pre><code class="tun-env">A2A_BASE_URL=https://tu-agente.trycloudflare.com
+PUBLIC_BASE_URL=https://tu-agente.trycloudflare.com</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <p class="paso-nota">Agrégalas a <code>.env</code> y reinicia con <code>docker compose up -d --force-recreate agent</code>.</p>
+        </li>
+        <li>
+          <h3>Crea un token y compártelo</h3>
+          <p>En Conexiones A2A, con solo las herramientas que quieras. Quien lo use necesita tu URL y ese token.</p>
+        </li>
+      </ol>
+      <p class="local-avisos">El túnel funciona mientras tu computador esté prendido. Y deja una sola copia de leygo encendida: si también lo tienes en un servidor, apaga una, o Telegram y las rutinas responderían dos veces.</p>
     </section>
 
     <!-- ───────────── Preguntas ───────────── -->

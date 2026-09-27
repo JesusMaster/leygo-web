@@ -44,7 +44,7 @@ leygo.cl, www.leygo.cl {
 - La página es un mapa de rutas hecho con el alfabeto del logo: línea continua = conexión fija, línea punteada índigo = una delegación en curso, amarillo = tú (tu mensaje, tu OK).
 - Tipografía única: Overpass (derivada de la señalética vial Highway Gothic) y Overpass Mono solo para código.
 - Colores en `:root` de `styles.css`. Modo oscuro automático según el sistema, con botón en la cabecera para cambiarlo (se recuerda en el navegador).
-- Animaciones: entrada del logo y del titular al cargar, la demo de la portada (se pausa sola fuera de pantalla y tiene botón de pausa), la tarjeta de aprobación al tocarla y el manifiesto de Nami al aparecer. Con "reducir movimiento" activado todo se muestra quieto.
+- Animaciones: entrada del logo y del titular al cargar, la demo de la portada (se pausa sola fuera de pantalla y tiene botón de pausa), la tarjeta de aprobación al tocarla, el manifiesto de Nami al aparecer y el túnel de "En tu computador" (sin túnel no te encuentran; con cloudflared o ngrok sí). Con "reducir movimiento" activado todo se muestra quieto.
 
 ## Editar la demo
 
