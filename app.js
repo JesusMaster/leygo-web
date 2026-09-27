@@ -16,7 +16,7 @@
         { t: 'pausa', ms: 500 },
         { t: 'viaje', de: 'google', a: 'coord' },
         { t: 'viaje', de: 'coord', a: 'telegram' },
-        { t: 'msg', de: 'leygo', texto: 'Mañana tienes tres reuniones: 09:30 comité de producto, 12:00 1:1 con Ignacio y 16:00 demo con un cliente. La de las 12 choca con tu bloque de foco.' },
+        { t: 'msg', de: 'leygo', texto: 'Mañana tienes tres reuniones: 09:30 comité de producto, 12:00 1:1 con Martín y 16:00 demo con un cliente. La de las 12 choca con tu bloque de foco.' },
       ],
     },
     correo: {
