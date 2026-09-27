@@ -347,13 +347,12 @@ cd leygo-agent</code></pre><button class="copiar" type="button">Copiar</button><
           </li>
           <li>
             <h3>Apunta tu dominio y levántalo</h3>
-            <p>Un registro A hacia tu servidor. Caddy saca el certificado solo. Agrega <code>--profile local</code> si quieres Redis, Qdrant y Ollama en el mismo servidor.</p>
-            <div class="terminal"><pre><code>echo "DOMAIN=agente.tudominio.cl" &gt;&gt; .env
-docker compose up -d</code></pre><button class="copiar" type="button">Copiar</button></div>
+            <p>Un registro A hacia tu servidor. Caddy saca el certificado solo. Agrega <code>--redis</code> o <code>--qdrant</code> si quieres esos servicios en el mismo servidor.</p>
+            <div class="terminal"><pre><code>./instalar.sh --dominio agente.tudominio.cl</code></pre><button class="copiar" type="button">Copiar</button></div>
           </li>
           <li>
             <h3>Sigue el asistente</h3>
-            <p>Abre tu dominio. Te pide el código que el servidor muestra en <code>docker compose logs agent</code> y te guía por tu cuenta, el modelo, Redis y Qdrant (en Docker, Redis Cloud o Qdrant Cloud), Google y Telegram. Al final se reinicia solo.</p>
+            <p>Abre tu dominio. Te pide el código que el servidor muestra en <code>docker compose logs agent</code> y te guía por tu cuenta, el modelo, los embeddings, Redis y Qdrant (en Docker, Redis Cloud o Qdrant Cloud), Google y Telegram. Al final se reinicia solo.</p>
           </li>
         </ol>
         <p class="instalar-pie">¿No tienes servidor? <a href="#local">Córrelo en tu computador con Docker</a>. ¿Lo vas a dejar en producción? La guía paso a paso para un Droplet de DigitalOcean está en <a href="https://github.com/JesusMaster/leygo-agent/blob/main/docs/DEPLOY.md">docs/DEPLOY.md</a>.</p>
@@ -413,15 +412,13 @@ docker compose up -d</code></pre><button class="copiar" type="button">Copiar</bu
       <ol class="pasos-local">
         <li>
           <h3>Levántalo en tu computador</h3>
-          <p>El perfil <code>local</code> levanta también Redis, Qdrant y Ollama en Docker, y <code>DOMAIN=:80</code> deja la interfaz en <code>http://localhost</code>.</p>
+          <p>Elige qué servicios levanta Docker: <code>--redis</code>, <code>--qdrant</code>, <code>--ollama</code> o <code>--todo</code>. Si ya tienes alguno corriendo en tu computador, déjalo fuera y leygo lo usa. La interfaz queda en <code>http://localhost</code>.</p>
           <div class="terminal"><pre><code>git clone https://github.com/JesusMaster/leygo-agent.git
 cd leygo-agent
-cp .env.example .env
-echo "DOMAIN=:80" &gt;&gt; .env
-docker compose --profile local up -d</code></pre><button class="copiar" type="button">Copiar</button></div>
+./instalar.sh --redis --qdrant</code></pre><button class="copiar" type="button">Copiar</button></div>
           <p class="paso-sig">Abre <code>http://localhost</code> y sigue el asistente. El código que te pide está en los logs:</p>
-          <div class="terminal"><pre><code>docker compose logs agent | grep -A2 "Código"</code></pre><button class="copiar" type="button">Copiar</button></div>
-          <p class="paso-nota">En el asistente elige "En Docker" para Redis, Qdrant y los embeddings; descarga el modelo de embeddings con un botón.</p>
+          <div class="terminal"><pre><code>docker compose logs agent | grep -A4 "configuración"</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <p class="paso-nota">En el asistente eliges el modelo de embeddings antes que Qdrant: Ollama gratis en tu equipo, o OpenAI, Gemini o Voyage. Quédate con uno: la memoria se vectoriza siempre con el mismo.</p>
         </li>
         <li>
           <h3>Abre un túnel, solo si vas a usar A2A o webhooks</h3>
