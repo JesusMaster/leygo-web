@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>leygo, tu agente personal en tu servidor</title>
   <meta name="description" content="leygo es un agente personal de código abierto: lee tu correo, tu calendario y tus reuniones, lleva tus compromisos y te pregunta antes de hacer algo importante. Corre en tu servidor, con el modelo que elijas.">
-  <meta name="theme-color" content="#F2F3F9" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#121130" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#F2F3F9">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://leygo.cl/">
   <meta property="og:title" content="leygo, tu agente personal en tu servidor">
@@ -16,12 +15,13 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/overpass-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
-  <script>document.documentElement.classList.add('js')</script>
+  <script>(function () { var d = document.documentElement; d.classList.add('js'); try { var t = localStorage.getItem('leygo-tema'); if (t === 'light' || t === 'dark') d.dataset.theme = t; } catch (e) {} })();</script>
   <script src="app.js" defer></script>
 </head>
 <body>
   <a class="saltar" href="#contenido">Saltar al contenido</a>
 
+  <div class="cabecera-fija">
   <header class="cabecera">
     <a class="marca" href="#" aria-label="leygo, inicio">
       <svg class="logo" viewBox="0 0 226.772 226.772" aria-hidden="true">
@@ -36,14 +36,19 @@
     </a>
     <nav class="nav" aria-label="Secciones">
       <a href="#que-hace">Qué hace</a>
+      <a href="#interfaz">Interfaz</a>
       <a href="#instalar">Instalar</a>
       <a href="#preguntas">Preguntas</a>
+      <button class="tema" type="button" aria-label="Cambiar a modo oscuro" title="Cambiar a modo oscuro">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle class="t-anillo" cx="12" cy="12" r="8"/><path class="t-mitad" d="M12 4a8 8 0 0 1 0 16z"/></svg>
+      </button>
       <a class="nav-github" href="https://github.com/JesusMaster/leygo-agent">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         GitHub
       </a>
     </nav>
   </header>
+  </div>
 
   <main id="contenido">
     <!-- ───────────── Portada ───────────── -->
@@ -114,40 +119,97 @@
     <section class="seccion" id="que-hace" aria-labelledby="t-que-hace">
       <div class="seccion-cabeza">
         <h2 id="t-que-hace">Lo que hace por ti</h2>
-        <p>Un coordinador entiende lo que pides y se lo pasa al especialista que corresponde. Tú hablas con uno solo.</p>
+        <p>Un coordinador entiende lo que pides y se lo pasa al especialista que corresponde. Tú hablas con uno solo. Así se ve lo que te llega:</p>
       </div>
-      <ul class="capacidades">
-        <li>
-          <svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="15" class="g-linea"/><path d="M24 14v10l7 4" class="g-linea"/><circle cx="24" cy="24" r="3" class="g-acento"/></svg>
-          <h3>Tu día, resumido cada mañana</h3>
-          <p>La agenda, los correos sin leer, lo que vence hoy y lo que quedó esperando tu respuesta, en un solo mensaje.</p>
-        </li>
-        <li>
-          <svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><circle cx="10" cy="24" r="5" class="g-lleno"/><circle cx="38" cy="24" r="5" class="g-acento"/><path d="M15 24h18" class="g-ruta"/></svg>
-          <h3>Compromisos que no se pierden</h3>
-          <p>Saca de reuniones, correos y chats lo que prometiste y lo que te deben, con fecha. Si alguien se atrasa, te propone el recordatorio y lo envía cuando le dices que sí.</p>
-        </li>
-        <li>
-          <svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="11" width="30" height="26" rx="4" class="g-linea"/><path d="M15 19h18M15 25h12M15 31h8" class="g-linea"/><circle cx="35" cy="33" r="5" class="g-acento"/></svg>
-          <h3>Memoria de tus reuniones</h3>
-          <p>Resume las grabaciones de Meet y los hilos de Gmail y Google Chat. Pregúntale qué acordaron con alguien y te responde con la fuente.</p>
-        </li>
-        <li>
-          <svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="18" r="8" class="g-linea"/><path d="M10 39c2-7 8-10 14-10s12 3 14 10" class="g-linea"/><circle cx="36" cy="12" r="4" class="g-acento"/></svg>
-          <h3>Sabe cómo trabajas</h3>
-          <p>Recuerda tus preferencias, tu equipo y tus horarios. Cuando descubre algo nuevo de ti, te pregunta si lo guarda.</p>
-        </li>
-        <li>
-          <svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 8 40 38H8Z" class="g-linea"/><path d="M24 20v8" class="g-linea"/><circle cx="24" cy="33" r="2.4" class="g-acento"/></svg>
-          <h3>Solo los avisos que importan</h3>
-          <p>Conecta Sentry, GitHub o tu monitoreo por webhook. El agente lee cada evento y te interrumpe solo cuando vale la pena.</p>
-        </li>
-        <li>
-          <svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><path d="M12 14a14 14 0 1 1-3 15" class="g-linea"/><path d="M6 12l3 7 7-3" class="g-linea"/><circle cx="24" cy="24" r="4" class="g-acento"/></svg>
-          <h3>Rutinas que pides en una frase</h3>
-          <p>"Cada lunes a las 9 revisa los PR abiertos y mándame un resumen." Queda como tarea programada, con el modelo y el canal que elijas.</p>
-        </li>
-      </ul>
+
+      <div class="piezas">
+        <article class="pieza">
+          <div class="pieza-texto">
+            <h3>Tu día, resumido cada mañana</h3>
+            <p>A la hora que elijas: agenda, correos que importan, lo que vence hoy y lo que espera tu respuesta.</p>
+          </div>
+          <div class="muestra muestra-mensaje" aria-label="Ejemplo de resumen matutino">
+            <div class="mm-cab"><span class="mm-avatar"></span><b>leygo</b><small>08:30</small></div>
+            <p><b>Buenos días. Hoy tienes 3 reuniones:</b></p>
+            <ul>
+              <li><time>09:30</time> Comité de producto</li>
+              <li><time>12:00</time> 1:1 con Ignacio <em>choca con tu bloque de foco</em></li>
+              <li><time>16:00</time> Demo con Retail Andes</li>
+            </ul>
+            <p><b>Correo:</b> 14 sin leer, 2 te necesitan (propuesta de Retail Andes y el contrato de Qdrant).</p>
+            <p><b>Vence hoy:</b> mover el lanzamiento al 14 de octubre en el roadmap.</p>
+          </div>
+        </article>
+
+        <article class="pieza">
+          <div class="pieza-texto">
+            <h3>Compromisos que no se pierden</h3>
+            <p>Saca de reuniones, correos y chats lo que prometiste y lo que te deben. Si alguien se atrasa, te propone el recordatorio.</p>
+          </div>
+          <div class="muestra muestra-lista" aria-label="Ejemplo de lista de compromisos">
+            <div class="ml-fila vencido"><span class="ml-quien">Te debe Ignacio</span><span class="ml-que">Cotizar Qdrant Cloud</span><span class="ml-cuando">venció ayer</span></div>
+            <div class="ml-fila"><span class="ml-quien tuyo">Tú</span><span class="ml-que">Mover el lanzamiento en el roadmap</span><span class="ml-cuando">hoy</span></div>
+            <div class="ml-fila"><span class="ml-quien">Te debe Camila</span><span class="ml-que">Encuesta de salida del piloto</span><span class="ml-cuando">viernes</span></div>
+            <div class="ml-propuesta">
+              <p><b>¿Le escribo a Ignacio?</b> "Nacho, ¿cómo vas con la cotización de Qdrant Cloud? Era para ayer."</p>
+              <div class="ml-acciones"><span class="mini-boton">No</span><span class="mini-boton si">Enviar por Chat</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="pieza">
+          <div class="pieza-texto">
+            <h3>Solo los avisos que importan</h3>
+            <p>Conecta Sentry, GitHub o tu monitoreo por webhook. El agente lee cada evento y te interrumpe solo cuando vale la pena.</p>
+          </div>
+          <div class="muestra muestra-registro" aria-label="Ejemplo de registro de webhooks">
+            <div class="mr-fila"><span class="mr-origen">GitHub</span><span class="mr-evento">PR #214 aprobado</span><span class="mr-decision">silenciado</span></div>
+            <div class="mr-fila"><span class="mr-origen">Sentry</span><span class="mr-evento">TypeError en /perfil, 3 eventos</span><span class="mr-decision">silenciado</span></div>
+            <div class="mr-fila aviso"><span class="mr-origen">Sentry</span><span class="mr-evento">Error 500 en /api/pagos, 212 eventos</span><span class="mr-decision">te avisó</span></div>
+            <div class="mr-fila"><span class="mr-origen">Uptime</span><span class="mr-evento">Latencia normal otra vez</span><span class="mr-decision">silenciado</span></div>
+          </div>
+        </article>
+
+        <article class="pieza">
+          <div class="pieza-texto">
+            <h3>Rutinas que pides en una frase</h3>
+            <p>Lo que le pides con "cada" queda como tarea programada, con el modelo y el canal que elijas.</p>
+          </div>
+          <div class="muestra muestra-rutina" aria-label="Ejemplo de rutina creada desde el chat">
+            <p class="mr-tu">Cada lunes a las 9 revisa los PR abiertos del equipo y mándame un resumen</p>
+            <div class="mr-tarea">
+              <b>Tarea programada creada</b>
+              <dl>
+                <div><dt>Cuándo</dt><dd>Lunes, 09:00</dd></div>
+                <div><dt>Entrega</dt><dd>Telegram</dd></div>
+                <div><dt>Próxima</dt><dd>lunes 29 de septiembre</dd></div>
+              </dl>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ───────────── Interfaz ───────────── -->
+    <section class="seccion seccion-interfaz" id="interfaz" aria-labelledby="t-interfaz">
+      <div class="seccion-cabeza">
+        <h2 id="t-interfaz">Y una interfaz para todo lo demás</h2>
+        <p>Además de Telegram, tienes tu propio panel en tu dominio: el chat con historial, tus compromisos, tus agentes y lo que sabe de ti.</p>
+      </div>
+      <div class="vistas" role="tablist" aria-label="Pantallas de la interfaz">
+        <button role="tab" class="vista" aria-selected="true" aria-controls="pantalla" data-vista="chat">Chat</button>
+        <button role="tab" class="vista" aria-selected="false" aria-controls="pantalla" data-vista="compromisos" tabindex="-1">Compromisos</button>
+        <button role="tab" class="vista" aria-selected="false" aria-controls="pantalla" data-vista="agentes" tabindex="-1">Agentes</button>
+        <button role="tab" class="vista" aria-selected="false" aria-controls="pantalla" data-vista="memoria" tabindex="-1">Memoria</button>
+      </div>
+      <p class="vista-nota" aria-live="polite">Cada respuesta muestra qué agentes trabajaron, cuánto tardó y cuánto costó. Con @nami le hablas directo a un agente tuyo.</p>
+      <figure class="marco" id="pantalla" role="tabpanel">
+        <div class="marco-barra"><span class="marco-url">agente.tudominio.cl</span></div>
+        <div class="marco-pantalla">
+          <img class="solo-claro" src="img/chat-light.webp" width="1600" height="1000" alt="Chat de leygo con una tabla de pendientes del comité y una respuesta directa del agente Nami" loading="lazy" decoding="async">
+          <img class="solo-oscuro" src="img/chat-dark.webp" width="1600" height="1000" alt="Chat de leygo con una tabla de pendientes del comité y una respuesta directa del agente Nami" loading="lazy" decoding="async">
+        </div>
+      </figure>
     </section>
 
     <!-- ───────────── Tu OK ───────────── -->
@@ -203,6 +265,13 @@
       <p class="proveedores">
         <span>Gemini</span> <span>OpenAI</span> <span>Anthropic</span> <span>xAI</span> <span>DeepSeek</span> <span>Groq</span> <span>Mistral</span> <span>Moonshot</span> <span>OpenRouter</span> <span>Ollama</span>
       </p>
+      <div class="asignacion" aria-label="Ejemplo de modelo por agente">
+        <div class="as-fila as-cab"><span>Agente</span><span>Modelo</span><span>Si falla</span></div>
+        <div class="as-fila"><span>Coordinador</span><span>Gemini 3.8 Flash</span><span>Claude Sonnet</span></div>
+        <div class="as-fila"><span>Programador de agentes</span><span>Claude Sonnet</span><span>Gemini 3.8 Flash</span></div>
+        <div class="as-fila"><span>Resumen de la mañana</span><span>Gemini 3.5 Flash Lite</span><span>Ollama, en tu servidor</span></div>
+        <div class="as-fila"><span>Ingesta de reuniones</span><span>Ollama, en tu servidor</span><span>Gemini 3.5 Flash Lite</span></div>
+      </div>
       <div class="modelos-detalle">
         <p><b>Un modelo por agente.</b> El coordinador con uno bueno, los resúmenes nocturnos con uno barato o local. Se cambia sin reiniciar.</p>
         <p><b>Respaldo automático.</b> Si el proveedor principal falla o se satura, la misma petición se repite con el de respaldo.</p>
@@ -277,23 +346,36 @@ docker compose up -d</code></pre><button class="copiar" type="button">Copiar</bu
   </main>
 
   <footer class="pie">
-    <a class="marca marca-pie" href="#" aria-label="leygo, volver arriba">
-      <svg class="logo" viewBox="0 0 226.772 226.772" aria-hidden="true">
-        <circle class="l-anillo" cx="50.827" cy="49.444" r="24.941" />
-        <line class="l-vertical" x1="50.386" y1="147.693" x2="50.386" y2="74.386" />
-        <line class="l-horizontal" x1="77.886" y1="175.193" x2="151.193" y2="175.193" />
-        <line class="l-ruta" x1="161.444" y1="152.791" x2="80.705" y2="72.051" />
-        <circle class="l-nodo" cx="50.386" cy="175.193" r="27.5" />
-        <circle class="l-nodo l-nodo-acento" cx="178.693" cy="175.193" r="27.5" />
-      </svg>
-      <span class="marca-texto">leygo</span>
-    </a>
-    <p>Código abierto, hecho en Chile.</p>
-    <nav aria-label="Enlaces del pie">
-      <a href="https://github.com/JesusMaster/leygo-agent">GitHub</a>
-      <a href="https://github.com/JesusMaster/leygo-agent/blob/main/docs/DEPLOY.md">Guía de producción</a>
-      <a href="https://github.com/JesusMaster/leygo-agent/issues">Reportar un problema</a>
-    </nav>
+    <div class="pie-dentro">
+      <div class="pie-marca">
+        <a class="marca" href="#" aria-label="leygo, volver arriba">
+          <svg class="logo" viewBox="0 0 226.772 226.772" aria-hidden="true">
+            <circle class="l-anillo" cx="50.827" cy="49.444" r="24.941" />
+            <line class="l-vertical" x1="50.386" y1="147.693" x2="50.386" y2="74.386" />
+            <line class="l-horizontal" x1="77.886" y1="175.193" x2="151.193" y2="175.193" />
+            <line class="l-ruta" x1="161.444" y1="152.791" x2="80.705" y2="72.051" />
+            <circle class="l-nodo" cx="50.386" cy="175.193" r="27.5" />
+            <circle class="l-nodo l-nodo-acento" cx="178.693" cy="175.193" r="27.5" />
+          </svg>
+          <span class="marca-texto">leygo</span>
+        </a>
+        <p>Tu agente personal, en tu servidor. Código abierto, hecho en Chile.</p>
+      </div>
+      <nav class="pie-col" aria-label="Producto">
+        <h2>Producto</h2>
+        <a href="#que-hace">Qué hace</a>
+        <a href="#interfaz">Interfaz</a>
+        <a href="#instalar">Instalar</a>
+        <a href="#preguntas">Preguntas</a>
+      </nav>
+      <nav class="pie-col" aria-label="Proyecto">
+        <h2>Proyecto</h2>
+        <a href="https://github.com/JesusMaster/leygo-agent">Código en GitHub</a>
+        <a href="https://github.com/JesusMaster/leygo-agent/blob/main/docs/DEPLOY.md">Guía de producción</a>
+        <a href="https://github.com/JesusMaster/leygo-agent/blob/main/CHANGELOG.md">Novedades</a>
+        <a href="https://github.com/JesusMaster/leygo-agent/issues">Reportar un problema</a>
+      </nav>
+    </div>
   </footer>
 </body>
 </html>

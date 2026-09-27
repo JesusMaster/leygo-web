@@ -378,4 +378,74 @@
     b.classList.add('listo');
     setTimeout(() => { b.textContent = 'Copiar'; b.classList.remove('listo'); }, 1800);
   }));
+
+  // ─── Modo claro / oscuro ─────────────────────────────────────────────────
+  const raiz = document.documentElement;
+  const btnTema = $('.tema');
+  const sistemaOscuro = matchMedia('(prefers-color-scheme: dark)');
+  const temaActual = () => raiz.dataset.theme || (sistemaOscuro.matches ? 'dark' : 'light');
+  const pintarTema = () => {
+    const oscuro = temaActual() === 'dark';
+    const txt = oscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro';
+    btnTema.setAttribute('aria-label', txt); btnTema.title = txt;
+    $('meta[name="theme-color"]').setAttribute('content', oscuro ? '#121130' : '#F2F3F9');
+  };
+  btnTema.addEventListener('click', () => {
+    const nuevo = temaActual() === 'dark' ? 'light' : 'dark';
+    // Si coincide con el del sistema, se olvida la preferencia y vuelve a seguir al sistema.
+    if (nuevo === (sistemaOscuro.matches ? 'dark' : 'light')) { delete raiz.dataset.theme; try { localStorage.removeItem('leygo-tema'); } catch {} }
+    else { raiz.dataset.theme = nuevo; try { localStorage.setItem('leygo-tema', nuevo); } catch {} }
+    pintarTema();
+    requestAnimationFrame(dibujar); // el mapa toma los colores nuevos
+  });
+  sistemaOscuro.addEventListener('change', pintarTema);
+  pintarTema();
+
+  // ─── Cabecera fija: borde al bajar y sección activa ──────────────────────
+  const fija = $('.cabecera-fija');
+  const alBajar = () => fija.classList.toggle('con-borde', scrollY > 8);
+  addEventListener('scroll', alBajar, { passive: true }); alBajar();
+  const enlaces = $$('.nav a[href^="#"]');
+  const secciones = enlaces.map((a) => $(a.getAttribute('href'))).filter(Boolean);
+  const visibles = new Map();
+  const obsSec = new IntersectionObserver((entradas) => {
+    for (const e of entradas) visibles.set(e.target.id, e.isIntersecting);
+    const actual = secciones.find((s) => visibles.get(s.id));
+    enlaces.forEach((a) => a.classList.toggle('activo', !!actual && a.getAttribute('href') === '#' + actual.id));
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  secciones.forEach((s) => obsSec.observe(s));
+
+  // ─── Interfaz: pestañas de pantallas ─────────────────────────────────────
+  const NOTAS = {
+    chat: 'Cada respuesta muestra qué agentes trabajaron, cuánto tardó y cuánto costó. Con @nami le hablas directo a un agente tuyo.',
+    compromisos: 'Lo que debes y lo que te deben, con su fuente (Meet, Gmail o Chat), fecha y un botón para escribirle a la persona.',
+    agentes: 'Tus agentes, creados con IA o a mano: canales, modelo, herramientas y variables. "Probar" abre un chat directo con cada uno.',
+    memoria: 'Lo que sabe de ti, lo que recuerda de reuniones y correos, y lo que te propone guardar después de leer tus conversaciones.',
+  };
+  const vistas = $$('.vista');
+  const [imgClaro, imgOscuro] = $$('.marco-pantalla img');
+  const nota = $('.vista-nota');
+  function mostrarVista(b) {
+    const v = b.dataset.vista;
+    vistas.forEach((x) => { const on = x === b; x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1; });
+    nota.textContent = NOTAS[v];
+    for (const [img, tema] of [[imgClaro, 'light'], [imgOscuro, 'dark']]) {
+      const src = `img/${v}-${tema}.webp`;
+      if (img.getAttribute('src') === src) continue;
+      const nuevo = new Image(); nuevo.src = src;
+      img.classList.add('cambiando');
+      const poner = () => { img.src = src; img.classList.remove('cambiando'); };
+      (nuevo.decode ? nuevo.decode() : Promise.resolve()).then(() => setTimeout(poner, reducido ? 0 : 150), poner);
+    }
+    const alt = { chat: 'Chat de leygo con una tabla de pendientes del comité y una respuesta directa del agente Nami', compromisos: 'Lista de compromisos con estados, responsables, fechas y contexto', agentes: 'Agentes personalizados Nami, Revisor, Banano y Viajes con sus canales y herramientas', memoria: 'Memoria: Descubrir con IA, datos que leygo propone guardar e ideas' }[v];
+    imgClaro.alt = imgOscuro.alt = alt;
+  }
+  vistas.forEach((b, i) => {
+    b.addEventListener('click', () => mostrarVista(b));
+    b.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const j = (i + (e.key === 'ArrowRight' ? 1 : vistas.length - 1)) % vistas.length;
+      vistas[j].focus(); mostrarVista(vistas[j]);
+    });
+  });
 })();

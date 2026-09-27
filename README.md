@@ -8,6 +8,7 @@ index.html     contenido y estructura
 styles.css     tokens de diseño, layout y animaciones
 app.js         demo de rutas, tarjeta de aprobación, manifiesto que se escribe solo, copiar comandos
 fonts/         Overpass y Overpass Mono (OFL), servidas desde el mismo dominio
+img/           capturas reales de la GUI (chat, compromisos, agentes, memoria) en claro y oscuro
 favicon.svg    logo de leygo (se adapta a modo oscuro)
 og.png         imagen para compartir en redes (1200×630)
 ```
@@ -42,9 +43,13 @@ leygo.cl, www.leygo.cl {
 
 - La página es un mapa de rutas hecho con el alfabeto del logo: línea continua = conexión fija, línea punteada índigo = una delegación en curso, amarillo = tú (tu mensaje, tu OK).
 - Tipografía única: Overpass (derivada de la señalética vial Highway Gothic) y Overpass Mono solo para código.
-- Colores en `:root` de `styles.css`, con variante oscura automática (`prefers-color-scheme`).
+- Colores en `:root` de `styles.css`. Modo oscuro automático según el sistema, con botón en la cabecera para cambiarlo (se recuerda en el navegador).
 - Animaciones: entrada del logo y del titular al cargar, la demo de la portada (se pausa sola fuera de pantalla y tiene botón de pausa), la tarjeta de aprobación al tocarla y el manifiesto de Nami al aparecer. Con "reducir movimiento" activado todo se muestra quieto.
 
 ## Editar la demo
 
 Las escenas están en `ESCENAS` al inicio de `app.js`. Cada paso es un mensaje (`msg`), una nota de ruteo (`paso`), un recorrido entre nodos (`viaje`, usando los `data-nodo` del HTML), una pausa o una aprobación (`ok`).
+
+## Actualizar las capturas de la interfaz
+
+Las imágenes de `img/` salen de la GUI real con datos de ejemplo (1600×1000, WebP). Si cambias la GUI, vuelve a sacarlas con el mismo tamaño y los mismos nombres (`<vista>-light.webp` y `<vista>-dark.webp`).
