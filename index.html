@@ -416,6 +416,15 @@ cd leygo-agent</code></pre><button class="copiar" type="button">Copiar</button><
           <div class="terminal"><pre><code>git clone https://github.com/JesusMaster/leygo-agent.git
 cd leygo-agent
 ./instalar.sh --redis --qdrant</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <p class="paso-sig">Otras combinaciones, según lo que ya tengas:</p>
+          <div class="terminal opciones" role="list" aria-label="Opciones de instalar.sh">
+            <div class="op" role="listitem"><code>./instalar.sh --redis --qdrant</code><span class="com"># solo esos en Docker</span></div>
+            <div class="op" role="listitem"><code>./instalar.sh --todo</code><span class="com"># Redis + Qdrant + Ollama</span></div>
+            <div class="op" role="listitem"><code>./instalar.sh --ninguno</code><span class="com"># usa los tuyos</span></div>
+            <div class="op" role="listitem"><code>./instalar.sh</code><span class="com"># repite la última selección</span></div>
+            <div class="op" role="listitem"><code>./instalar.sh --dominio tu.dominio.cl --qdrant</code><span class="com"># en un servidor, con TLS</span></div>
+          </div>
+          <p class="paso-nota">La selección queda guardada en <code>.env</code>: un <code>docker compose up -d</code> después levanta lo mismo.</p>
           <p class="paso-sig">Abre <code>http://localhost</code> y sigue el asistente. El código que te pide está en los logs:</p>
           <div class="terminal"><pre><code>docker compose logs agent | grep -A4 "configuración"</code></pre><button class="copiar" type="button">Copiar</button></div>
           <p class="paso-nota">En el asistente eliges el modelo de embeddings antes que Qdrant: Ollama gratis en tu equipo, o OpenAI, Gemini o Voyage. Quédate con uno: la memoria se vectoriza siempre con el mismo.</p>

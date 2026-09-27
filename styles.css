@@ -459,6 +459,11 @@ code { font-family: var(--f-mono); font-size: .88em; }
 .pasos-local .terminal { background: var(--noche); color: var(--noche-tinta); }
 .pasos-local .terminal code { background: none; padding: 0; color: inherit; }
 .pasos-local .copiar { color: var(--noche-tinta); }
+.pasos-local .terminal.opciones { padding-right: 18px; display: grid; grid-template-columns: max-content minmax(0, 1fr); column-gap: 22px; row-gap: 4px; font-family: var(--f-mono); font-size: 14.5px; line-height: 1.7; }
+.pasos-local .opciones .op { display: contents; }
+.pasos-local .opciones code { white-space: nowrap; }
+.pasos-local .terminal .com { color: var(--noche-tinta); opacity: .55; }
+.pasos-local .opciones .com { white-space: nowrap; }
 .pasos-local .paso-nota { margin-top: 12px; font-size: 15.5px; }
 .pasos-local .paso-sig { margin: 16px 0 10px; }
 .pasos-local .aviso-seguridad { margin: 14px 0; padding: 12px 14px; border-radius: 10px; background: rgba(216, 65, 59, .09); border-left: 4px solid #D8413B; color: var(--tinta); font-size: 16px; }
@@ -624,3 +629,4 @@ code { font-family: var(--f-mono); font-size: .88em; }
   *, *::before, *::after { animation-duration: .001ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
   .ruta { animation: none; }
 }
+@media (max-width: 800px) { .pasos-local .terminal.opciones { padding-top: 16px; grid-template-columns: minmax(0, 1fr); row-gap: 0; font-size: 13.5px; } .pasos-local .opciones .op { display: flex; flex-direction: column-reverse; padding: 6px 0; } .pasos-local .opciones code { white-space: normal; overflow-wrap: anywhere; } .pasos-local .opciones .com { white-space: normal; } }
