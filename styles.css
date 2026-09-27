@@ -352,6 +352,33 @@ code { font-family: var(--f-mono); font-size: .88em; }
   :root:not([data-theme="light"]) .solo-claro { display: none; }
 }
 
+/* Portada: hecho con */
+.hecho-con { grid-column: 1 / -1; font-size: 15px; color: var(--tinta-2); margin-top: -6px; }
+.hecho-con a { color: var(--tinta); font-weight: 700; text-decoration: none; border-bottom: 2px dashed var(--leygo); }
+.hecho-con a:hover { color: var(--leygo); }
+@media (min-width: 901px) { .hecho-con { text-align: right; } }
+
+/* ADK + A2A */
+.seccion-a2a { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 56px; align-items: start; }
+.seccion-a2a > * { min-width: 0; }
+.a2a-texto h2 { margin-bottom: 26px; }
+.a2a-texto p { color: var(--tinta-2); max-width: 54ch; margin-top: 14px; }
+.a2a-texto a { color: var(--tinta); text-underline-offset: 3px; text-decoration-color: var(--leygo); }
+.a2a-texto code { background: var(--papel-2); padding: 1px 6px; border-radius: 5px; color: var(--tinta); }
+.a2a-pasos { list-style: none; counter-reset: a2a; display: grid; gap: 16px; margin: 28px 0 8px; }
+.a2a-pasos li { counter-increment: a2a; position: relative; padding-left: 48px; color: var(--tinta-2); max-width: 54ch; }
+.a2a-pasos li::before { content: counter(a2a); position: absolute; left: 0; top: -2px; width: 32px; height: 32px; border-radius: 50%; border: 3px solid var(--tinta); display: grid; place-items: center; font-weight: 800; font-size: 15px; color: var(--tinta); padding-top: 2px; }
+.a2a-pasos b { color: var(--tinta); }
+.a2a-extra { font-size: 16px; }
+.a2a-codigo figcaption { font-size: 14px; color: var(--tinta-3); margin-bottom: 10px; }
+.a2a-codigo .terminal { background: var(--noche); color: var(--noche-tinta); max-width: none; box-shadow: var(--sombra); }
+.a2a-codigo .copiar { color: var(--noche-tinta); }
+.a2a-respuesta { margin-top: 14px; background: var(--carta); border-radius: 16px 16px 16px 5px; padding: 14px 16px; box-shadow: var(--sombra); max-width: 88%; }
+.a2a-respuesta span { font-size: 13px; font-weight: 700; color: var(--tinta-3); }
+.a2a-respuesta p { margin-top: 2px; font-size: 16px; }
+@media (max-width: 900px) { .seccion-a2a { grid-template-columns: 1fr; } }
+@media (max-width: 800px) { .a2a-codigo .terminal { padding-top: 48px; padding-right: 18px; } .a2a-codigo .terminal pre { font-size: 13px; } .a2a-respuesta { max-width: 100%; } }
+
 /* Modelos: asignación */
 .asignacion { margin-top: 40px; max-width: 860px; border-top: 2px solid var(--tinta); }
 .as-fila { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 16px; padding: 13px 0 11px; border-bottom: 1px solid var(--linea); font-size: 17px; }
@@ -421,7 +448,13 @@ code { font-family: var(--f-mono); font-size: .88em; }
 
 /* Modelos */
 .seccion-modelos h2 { margin-bottom: 30px; }
-.proveedores { display: flex; flex-wrap: wrap; gap: 0 .55em; font-size: clamp(30px, 4.4vw, 58px); line-height: 1.15; font-weight: 300; letter-spacing: -.02em; color: var(--tinta); }
+.proveedores { list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 34px 24px; margin-top: 8px; }
+.proveedores li { display: flex; align-items: center; gap: 12px; font-size: 21px; font-weight: 600; letter-spacing: -.01em; color: var(--tinta); }
+.prov-logo { width: 34px; height: 34px; flex-shrink: 0; fill: currentColor; transition: color .2s, transform .25s; }
+.proveedores li:hover .prov-logo { color: var(--leygo); transform: scale(1.08); }
+.proveedores-nota { margin-top: 26px; color: var(--tinta-2); font-size: 16px; }
+@media (max-width: 960px) { .proveedores { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .proveedores { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; } .proveedores li { font-size: 18px; } .prov-logo { width: 28px; height: 28px; } }
 .modelos-detalle { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 48px; margin-top: 48px; }
 .modelos-detalle p { color: var(--tinta-2); font-size: 17px; }
 .modelos-detalle b { display: block; color: var(--tinta); font-size: 19px; margin-bottom: 4px; }
@@ -473,6 +506,7 @@ code { font-family: var(--f-mono); font-size: .88em; }
 .pie .logo { width: 28px; height: 28px; }
 .pie .marca-texto { font-size: 24px; }
 .pie-marca p { color: var(--tinta-2); font-size: 16px; margin-top: 14px; max-width: 34ch; }
+.pie-marca .pie-legal { font-size: 13px; color: var(--tinta-3); margin-top: 10px; }
 .pie-col { display: flex; flex-direction: column; gap: 10px; font-size: 16px; }
 .pie-col h2 { font-size: 15px; font-weight: 700; color: var(--tinta-3); margin-bottom: 4px; }
 .pie-col a { color: var(--tinta-2); text-decoration: none; }

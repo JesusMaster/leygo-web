@@ -448,4 +448,7 @@
       vistas[j].focus(); mostrarVista(vistas[j]);
     });
   });
+
+  // ─── Enlaces que abren una escena de la demo ─────────────────────────────
+  $$('[data-ir-escena]').forEach((a) => a.addEventListener('click', () => reproducir(a.dataset.irEscena)));
 })();
