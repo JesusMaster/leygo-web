@@ -4,19 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>leygo, tu agente personal en tu servidor o tu computador</title>
-  <meta name="description" content="leygo es un agente personal de código abierto: lee tu correo, tu calendario y tus reuniones, lleva tus compromisos y te pregunta antes de hacer algo importante. Corre en tu servidor o en tu computador, con el modelo que elijas.">
+  <meta name="description" content="leygo es un agente personal gratuito: lee tu correo, tu calendario y tus reuniones, lleva tus compromisos y te pregunta antes de hacer algo importante. Corre en tu servidor o en tu computador, con el modelo que elijas.">
   <meta name="theme-color" content="#F2F3F9">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://leygo.cl/">
   <meta property="og:title" content="leygo, tu agente personal en tu servidor o tu computador">
-  <meta property="og:description" content="Delega en un equipo de agentes que corre en tu servidor o en tu computador. Código abierto, con el modelo que elijas.">
+  <meta property="og:description" content="Delega en un equipo de agentes que corre en tu servidor o en tu computador. Gratis, con el modelo que elijas.">
   <meta property="og:image" content="https://leygo.cl/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/overpass-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20260928">
   <script>(function () { var d = document.documentElement; d.classList.add('js'); try { var t = localStorage.getItem('leygo-tema'); if (t === 'light' || t === 'dark') d.dataset.theme = t; } catch (e) {} })();</script>
-  <script src="app.js" defer></script>
+  <script src="app.js?v=20260928" defer></script>
 </head>
 <body>
   <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -43,7 +43,7 @@
       <button class="tema" type="button" aria-label="Cambiar a modo oscuro" title="Cambiar a modo oscuro">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle class="t-anillo" cx="12" cy="12" r="8"/><path class="t-mitad" d="M12 4a8 8 0 0 1 0 16z"/></svg>
       </button>
-      <a class="nav-github" href="https://github.com/JesusMaster/leygo-agent">
+      <a class="nav-github" href="https://github.com/JesusMaster/leygo">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         GitHub
       </a>
@@ -63,7 +63,7 @@
           <p class="bajada">leygo lee tu correo, tu calendario y tus reuniones, lleva la cuenta de lo que prometiste y de lo que te deben, y te pregunta antes de hacer algo importante. Le hablas por Telegram, por su chat web, por Buzz o desde otros agentes.</p>
           <div class="acciones">
             <a class="boton boton-primario" href="#instalar">Instalar leygo</a>
-            <a class="boton boton-secundario" href="https://github.com/JesusMaster/leygo-agent">Ver el código en GitHub</a>
+            <a class="boton boton-secundario" href="https://github.com/JesusMaster/leygo/releases">Novedades</a>
           </div>
           <p class="hecho-con">Hecho con <a href="#adk-a2a">Google ADK</a> y abierto a otros agentes por <a href="#adk-a2a">A2A</a>.</p>
         </div>
@@ -365,30 +365,25 @@
       <div class="instalar-dentro">
         <div class="instalar-cabeza">
           <h2 id="t-instalar">Instalar</h2>
-          <p>Necesitas un servidor con Docker y la clave de algún proveedor de modelos (con Gemini basta para empezar). Redis y Qdrant pueden correr en el mismo Docker o en su capa gratis en la nube.</p>
+          <p>Necesitas un servidor con Docker y la clave de algún proveedor de modelos (con Gemini basta para empezar). Redis y Qdrant pueden correr en el mismo Docker o en su capa gratis en la nube. leygo se descarga ya compilado: no hace falta clonar ni compilar nada.</p>
         </div>
         <ol class="pasos">
           <li>
-            <h3>Clona el repositorio</h3>
-            <div class="terminal"><pre><code>git clone https://github.com/JesusMaster/leygo-agent.git
-cd leygo-agent</code></pre><button class="copiar" type="button">Copiar</button></div>
+            <h3>Apunta tu dominio a tu servidor</h3>
+            <p>Un registro A hacia la IP del servidor. Caddy saca el certificado solo.</p>
           </li>
           <li>
-            <h3>Copia la configuración de ejemplo</h3>
-            <p>No hace falta editar nada más a mano: las claves, la base de datos y las cuentas se configuran después, en el asistente.</p>
-            <div class="terminal"><pre><code>cp .env.example .env</code></pre><button class="copiar" type="button">Copiar</button></div>
-          </li>
-          <li>
-            <h3>Apunta tu dominio y levántalo</h3>
-            <p>Un registro A hacia tu servidor. Caddy saca el certificado solo. Agrega <code>--redis</code> o <code>--qdrant</code> si quieres esos servicios en el mismo servidor.</p>
-            <div class="terminal"><pre><code>./instalar.sh --dominio agente.tudominio.cl</code></pre><button class="copiar" type="button">Copiar</button></div>
+            <h3>Instálalo con un comando</h3>
+            <p>Crea la carpeta <code>leygo</code>, baja las imágenes y lo levanta. Agrega <code>--redis</code> o <code>--qdrant</code> si quieres esos servicios en el mismo servidor.</p>
+            <div class="terminal"><pre><code>curl -fsSL https://leygo.cl/instalar.sh | bash -s -- \
+  --dominio agente.tudominio.cl --redis --qdrant</code></pre><button class="copiar" type="button">Copiar</button></div>
           </li>
           <li>
             <h3>Sigue el asistente</h3>
             <p>Abre tu dominio. Te pide el código que el servidor muestra en <code>docker compose logs agent</code> y te guía por tu cuenta, el nombre y la personalidad de tu agente, el modelo, los embeddings, Redis y Qdrant (en Docker, Redis Cloud o Qdrant Cloud), Google y Telegram. Al final se reinicia solo.</p>
           </li>
         </ol>
-        <p class="instalar-pie">¿No tienes servidor? <a href="#local">Córrelo en tu computador con Docker</a>. ¿Lo vas a dejar en producción? La guía paso a paso para un Droplet de DigitalOcean está en <a href="https://github.com/JesusMaster/leygo-agent/blob/main/docs/DEPLOY.md">docs/DEPLOY.md</a>.</p>
+        <p class="instalar-pie">¿No tienes servidor? <a href="#local">Córrelo en tu computador con Docker</a>. Para actualizar, <code>cd leygo &amp;&amp; ./instalar.sh</code>: tus datos y tu configuración no se tocan. Todas las opciones del instalador están en <a href="https://github.com/JesusMaster/leygo#readme">GitHub</a>.</p>
       </div>
     </section>
 
@@ -446,10 +441,9 @@ cd leygo-agent</code></pre><button class="copiar" type="button">Copiar</button><
         <li>
           <h3>Levántalo en tu computador</h3>
           <p>Elige qué servicios levanta Docker: <code>--redis</code>, <code>--qdrant</code>, <code>--ollama</code> o <code>--todo</code>. Si ya tienes alguno corriendo en tu computador, déjalo fuera y leygo lo usa. La interfaz queda en <code>http://localhost</code>.</p>
-          <div class="terminal"><pre><code>git clone https://github.com/JesusMaster/leygo-agent.git
-cd leygo-agent
-./instalar.sh --redis --qdrant</code></pre><button class="copiar" type="button">Copiar</button></div>
-          <p class="paso-sig">Otras combinaciones, según lo que ya tengas:</p>
+          <div class="terminal"><pre><code>curl -fsSL https://leygo.cl/instalar.sh | bash -s -- \
+  --redis --qdrant</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <p class="paso-sig">Queda en la carpeta <code>leygo</code>. Desde ahí, otras combinaciones según lo que ya tengas:</p>
           <div class="terminal opciones" role="list" aria-label="Opciones de instalar.sh">
             <div class="op" role="listitem"><code>./instalar.sh --redis --qdrant</code><span class="com"># solo esos en Docker</span></div>
             <div class="op" role="listitem"><code>./instalar.sh --todo</code><span class="com"># Redis + Qdrant + Ollama</span></div>
@@ -495,6 +489,10 @@ PUBLIC_BASE_URL=https://tu-agente.trycloudflare.com</code></pre><button class="c
           <p>En tu servidor o en tu computador: la base SQLite, Redis y Qdrant son tuyos. Sale solo lo que mandas a los proveedores que tú activas: el de modelos, el de embeddings si no usas Ollama y Jev si lo encendiste. Con Ollama y sin Jev, no sale nada.</p>
         </details>
         <details>
+          <summary>¿Es de código abierto?</summary>
+          <p>No. leygo se distribuye compilado, en imágenes de Docker, y es gratis para usarlo en tus equipos, personal o dentro de tu organización. Lo que no se permite es redistribuirlo, venderlo u ofrecerlo como servicio a terceros (<a href="licencia.txt">licencia</a>). Tus datos y los agentes que crees con él son tuyos.</p>
+        </details>
+        <details>
           <summary>¿Cuánto cuesta?</summary>
           <p>leygo no cuesta nada. Pagas tu servidor (un Droplet de 2 GB anda bien, unos US$12 al mes) y lo que consuma el modelo. La interfaz te muestra cuánto costó cada respuesta y te avisa si pasas el presupuesto que definas.</p>
         </details>
@@ -536,7 +534,7 @@ PUBLIC_BASE_URL=https://tu-agente.trycloudflare.com</code></pre><button class="c
           </svg>
           <span class="marca-texto">leygo</span>
         </a>
-        <p>Tu agente personal, en tu servidor. Código abierto, hecho en Chile.</p>
+        <p>Tu agente personal, en tu servidor o tu computador. Gratis, hecho en Chile.</p>
         <p class="pie-legal">Google, ADK y los logos de los proveedores de modelos son marcas de sus dueños; leygo no está afiliado a ellos.</p>
       </div>
       <nav class="pie-col" aria-label="Producto">
@@ -549,10 +547,10 @@ PUBLIC_BASE_URL=https://tu-agente.trycloudflare.com</code></pre><button class="c
       </nav>
       <nav class="pie-col" aria-label="Proyecto">
         <h2>Proyecto</h2>
-        <a href="https://github.com/JesusMaster/leygo-agent">Código en GitHub</a>
-        <a href="https://github.com/JesusMaster/leygo-agent/blob/main/docs/DEPLOY.md">Guía de producción</a>
-        <a href="https://github.com/JesusMaster/leygo-agent/blob/main/CHANGELOG.md">Novedades</a>
-        <a href="https://github.com/JesusMaster/leygo-agent/issues">Reportar un problema</a>
+        <a href="https://github.com/JesusMaster/leygo">GitHub</a>
+        <a href="https://github.com/JesusMaster/leygo/releases">Novedades</a>
+        <a href="https://github.com/JesusMaster/leygo/issues">Reportar un problema</a>
+        <a href="licencia.txt">Licencia</a>
       </nav>
     </div>
   </footer>
