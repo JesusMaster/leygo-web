@@ -493,6 +493,24 @@
     });
   });
   if (donde.length) mostrarDonde(donde[0]);
+  // Puerto: actualiza el comando, la salida y la URL de "En tu computador".
+  const campoPuerto = $('#puerto');
+  if (campoPuerto) {
+    const errPuerto = $('#puerto-error');
+    const ponerPuerto = () => {
+      const v = campoPuerto.value.trim();
+      const n = Number(v);
+      const ok = /^[0-9]{1,5}$/.test(v) && n >= 1 && n <= 65535;
+      campoPuerto.setAttribute('aria-invalid', !ok);
+      errPuerto.textContent = ok ? '' : 'Un número entre 1 y 65535.';
+      if (!ok) return;
+      $$('#panel-pc .v-puerto').forEach((e) => { e.textContent = String(n); });
+      $$('#panel-pc .v-url').forEach((e) => { e.textContent = n === 80 ? 'http://localhost' : `http://localhost:${n}`; });
+    };
+    campoPuerto.addEventListener('input', ponerPuerto);
+    campoPuerto.addEventListener('blur', () => { if (campoPuerto.getAttribute('aria-invalid') === 'true') { campoPuerto.value = $('#panel-pc .v-puerto').textContent; ponerPuerto(); } });
+  }
+
   // La salida del instalador aparece línea a línea la primera vez que se ve cada panel.
   const ventanas = $$('.ventana');
   const obsVentana = new IntersectionObserver((es) => es.forEach((e) => {

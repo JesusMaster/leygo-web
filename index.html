@@ -14,9 +14,9 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/overpass-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=20260928c">
+  <link rel="stylesheet" href="styles.css?v=20260928d">
   <script>(function () { var d = document.documentElement; d.classList.add('js'); try { var t = localStorage.getItem('leygo-tema'); if (t === 'light' || t === 'dark') d.dataset.theme = t; } catch (e) {} })();</script>
-  <script src="app.js?v=20260928c" defer></script>
+  <script src="app.js?v=20260928d" defer></script>
 </head>
 <body>
   <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -323,15 +323,16 @@
         <div class="donde-panel" id="panel-pc" role="tabpanel" aria-labelledby="tab-pc">
           <h3 class="donde-titulo">En tu computador</h3>
           <ol class="pasos-inst">
+            <li><b>Elige el puerto</b> de la interfaz: 80 si está libre; si ya lo usa otra cosa, prueba 8080.
+              <span class="puerto-campo"><label for="puerto">Puerto</label><input id="puerto" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" value="80" autocomplete="off" aria-describedby="puerto-error"><span id="puerto-error" class="puerto-error" aria-live="polite"></span></span></li>
             <li><b>Abre Docker</b> y corre el comando en tu terminal.</li>
-            <li><b>Entra a <code>http://localhost</code></b> cuando diga "Listo".</li>
-            <li><b>Escribe el código</b> que te muestra y sigue el asistente: tu cuenta, la personalidad, el modelo y las conexiones.</li>
+            <li><b>Entra a <code class="v-url">http://localhost</code></b> y escribe el código que te muestra. El asistente hace el resto.</li>
           </ol>
           <div class="ventana">
             <div class="ventana-barra"><span class="ventana-titulo">Terminal</span><button class="copiar" type="button">Copiar</button></div>
             <pre class="ventana-cmd"><span class="prompt" aria-hidden="true">$ </span><code>curl -fsSL https://leygo.cl/instalar.sh \
-  | bash -s -- --redis --qdrant</code></pre>
-            <pre class="salida" aria-label="Lo que verás al terminar"><span style="--i:0">Descargando la instalación de leygo…</span><span style="--i:1">Servicios:</span><span style="--i:2">  • Redis   → en Docker</span><span style="--i:3">  • Qdrant  → en Docker</span><span style="--i:4">  • Puerto  → 80</span><span style="--i:5">Descargando leygo…</span><span style="--i:6" class="ok">Listo. Abre <b>http://localhost</b></span><span style="--i:7">Esperando que leygo arranque.....</span><span style="--i:8" class="codigo">Código de configuración: <b>K7TD-M4QA</b></span></pre>
+  | bash -s -- --puerto <span class="v-puerto">80</span> --redis --qdrant</code></pre>
+            <pre class="salida" aria-label="Lo que verás al terminar"><span style="--i:0">Descargando la instalación de leygo…</span><span style="--i:1">Servicios:</span><span style="--i:2">  • Redis   → en Docker</span><span style="--i:3">  • Qdrant  → en Docker</span><span style="--i:4">  • Puerto  → <span class="v-puerto">80</span></span><span style="--i:5">Descargando leygo…</span><span style="--i:6" class="ok">Listo. Abre <b class="v-url">http://localhost</b></span><span style="--i:7">Esperando que leygo arranque.....</span><span style="--i:8" class="codigo">Código de configuración: <b>K7TD-M4QA</b></span></pre>
           </div>
         </div>
 
@@ -339,7 +340,7 @@
           <h3 class="donde-titulo">En un servidor</h3>
           <ol class="pasos-inst">
             <li><b>Apunta tu dominio</b> a la IP del servidor con un registro A.</li>
-            <li><b>Corre el comando</b> en el servidor. El certificado HTTPS sale solo.</li>
+            <li><b>Corre el comando</b> en el servidor. Usa los puertos 80 y 443, que el certificado HTTPS necesita, y sale solo.</li>
             <li><b>Entra a tu dominio y escribe el código</b> que te muestra. El asistente hace el resto.</li>
           </ol>
           <div class="ventana">

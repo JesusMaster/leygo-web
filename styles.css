@@ -550,12 +550,12 @@ html:not(.js) .donde { display: none; }
 .ventana-cmd { padding: 18px 18px 16px; font-size: 14.5px; line-height: 1.7; color: var(--noche-tinta); }
 .ventana-cmd .prompt { color: var(--noche-leygo); user-select: none; }
 .salida { margin: 0 18px; padding: 14px 0 20px; border-top: 1px dashed rgba(255, 255, 255, .14); font-size: 13.5px; line-height: 1.8; color: var(--noche-tinta-2); }
-.salida span { display: block; }
+.salida > span { display: block; }
 .salida .ok b { color: var(--noche-tinta); font-weight: 600; }
 .salida .codigo { color: var(--noche-tinta); }
 .salida .codigo b { background: var(--marcador); color: #17153A; padding: 2px 7px 1px; border-radius: 5px; font-weight: 700; }
-.js .salida span { opacity: 0; transform: translateY(4px); }
-.ventana.corre .salida span { animation: linea-sale .32s ease-out forwards; animation-delay: calc(var(--i) * .3s + .35s); }
+.js .salida > span { opacity: 0; transform: translateY(4px); }
+.ventana.corre .salida > span { animation: linea-sale .32s ease-out forwards; animation-delay: calc(var(--i) * .3s + .35s); }
 .ventana.corre .salida .ok, .ventana.corre .salida .codigo { animation-delay: calc(var(--i) * .3s + .9s); }
 @keyframes linea-sale { to { opacity: 1; transform: none; } }
 
@@ -595,3 +595,13 @@ html:not(.js) .donde { display: none; }
   .pasos-inst li { font-size: 17px; }
 }
 @media (max-width: 480px) { .donde { display: flex; } .donde button { flex: 1; justify-content: center; padding: 12px 8px 10px; font-size: 15px; gap: 7px; } .donde svg { width: 19px; height: 19px; } }
+
+/* Puerto elegido en "En tu computador" */
+.puerto-campo { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 12px; }
+.puerto-campo label { font-size: 15px; font-weight: 700; color: var(--noche-tinta); }
+.puerto-campo input { width: 92px; font: 600 16px/1 var(--f-mono); color: var(--noche-tinta); background: rgba(255, 255, 255, .06); border: 1.5px solid rgba(255, 255, 255, .22); border-radius: 10px; padding: 10px 12px 8px; }
+.puerto-campo input:focus { outline: none; border-color: var(--noche-leygo); box-shadow: 0 0 0 3px rgba(169, 167, 255, .3); }
+.puerto-campo input[aria-invalid="true"] { border-color: #FF8A84; }
+.puerto-error { font-size: 14px; color: #FF8A84; }
+.puerto-error:empty { display: none; }
+html:not(.js) .puerto-campo { display: none; }
