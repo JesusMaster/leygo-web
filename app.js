@@ -393,7 +393,7 @@
 
   // ─── Copiar comandos ─────────────────────────────────────────────────────
   $$('.copiar').forEach((b) => b.addEventListener('click', async () => {
-    const texto = b.previousElementSibling.textContent;
+    const texto = (b.closest('.ventana')?.querySelector('.ventana-cmd code') || b.previousElementSibling).textContent;
     try { await navigator.clipboard.writeText(texto); b.textContent = 'Copiado'; }
     catch { b.textContent = 'Selecciona y copia'; }
     b.classList.add('listo');
@@ -493,6 +493,12 @@
     });
   });
   if (donde.length) mostrarDonde(donde[0]);
+  // La salida del instalador aparece línea a línea la primera vez que se ve cada panel.
+  const ventanas = $$('.ventana');
+  const obsVentana = new IntersectionObserver((es) => es.forEach((e) => {
+    if (e.isIntersecting) { e.target.classList.add('corre'); obsVentana.unobserve(e.target); }
+  }), { threshold: .5 });
+  ventanas.forEach((v) => (reducido ? v.classList.add('corre') : obsVentana.observe(v)));
 
   // ─── Enlaces a una pregunta: la abren ────────────────────────────────────
   const abrirPregunta = () => { const d = location.hash && document.querySelector(`details${location.hash}`); if (d) d.open = true; };
