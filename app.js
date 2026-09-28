@@ -4,6 +4,27 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
+  // ─── Portada: "tu servidor" / "tu computador" ─────────────────────────────
+  // Alterna la palabra cada pocos segundos; se detiene fuera de pantalla o con la pestaña oculta.
+  // Con movimiento reducido el cambio es instantáneo (las transiciones quedan en ~0).
+  const rota = $('.rota');
+  if (rota) {
+    const palabras = $$('.rota-p', rota);
+    let i = 0, visible = true;
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(rota);
+    setTimeout(() => setInterval(() => {
+      if (!visible || document.hidden) return;
+      const actual = palabras[i];
+      i = (i + 1) % palabras.length;
+      const sig = palabras[i];
+      sig.classList.remove('sale');
+      actual.classList.remove('activa');
+      actual.classList.add('sale');
+      sig.classList.add('activa');
+      setTimeout(() => actual.classList.remove('sale'), 700);
+    }, 2800), 1800);
+  }
+
   // ─── Escenas de la demo (todas son cosas que leygo hace) ─────────────────
   const ESCENAS = {
     agenda: {
