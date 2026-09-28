@@ -4,6 +4,9 @@
 #   curl -fsSL https://leygo.cl/instalar.sh | bash -s -- --redis --qdrant
 #   curl -fsSL https://leygo.cl/instalar.sh | bash -s -- --dominio agente.tudominio.cl --redis --qdrant
 #
+# Otro leygo en el mismo computador: otra carpeta y otro puerto.
+#   curl -fsSL https://leygo.cl/instalar.sh | bash -s -- --carpeta leygo-pruebas --puerto 8080 --redis --qdrant
+#
 # Crea (o actualiza) la carpeta "leygo" con la configuración de Docker, sin código fuente:
 # leygo se descarga ya compilado desde ghcr.io. Las opciones se le pasan a ./instalar.sh
 # (usa --help para verlas). Tus datos, tu .env y tu config/ nunca se sobrescriben.
@@ -11,6 +14,16 @@
 set -euo pipefail
 
 DIR="${LEYGO_DIR:-leygo}"
+# --carpeta X es de este script; el resto de las opciones pasa tal cual a ./instalar.sh.
+args=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --carpeta) shift; DIR="${1:-leygo}" ;;
+    --carpeta=*) DIR="${1#*=}" ;;
+    *) args+=("$1") ;;
+  esac
+  shift
+done
 FUENTE="${LEYGO_FUENTE:-https://raw.githubusercontent.com/JesusMaster/leygo/main}"
 
 command -v curl >/dev/null || { echo "Falta curl."; exit 1; }
@@ -39,4 +52,4 @@ if [ $nuevo = 1 ]; then
 fi
 
 # Sin terminal (curl | bash) el instalador no necesita preguntar nada: todo va por opciones.
-exec ./instalar.sh "$@"
+exec ./instalar.sh ${args[@]+"${args[@]}"}
