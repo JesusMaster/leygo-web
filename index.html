@@ -454,7 +454,7 @@
           </div>
           <p class="paso-nota">La selección queda guardada en <code>.env</code>: un <code>docker compose up -d</code> después levanta lo mismo. ¿Otro leygo en el mismo computador? Otra carpeta y otro puerto: <code>curl -fsSL https://leygo.cl/instalar.sh | bash -s -- --carpeta leygo-pruebas --puerto 8080 --redis --qdrant</code>.</p>
           <p class="paso-sig">Abre <code>http://localhost</code> y sigue el asistente. El instalador te muestra el código que te pide; si lo perdiste, está en los logs:</p>
-          <div class="terminal"><pre><code>cd leygo &amp;&amp; docker compose logs agent | grep -A4 "configuración"</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <div class="terminal"><pre><code>cd leygo/ &amp;&amp; docker compose logs agent | grep -A4 "configuración"</code></pre><button class="copiar" type="button">Copiar</button></div>
           <p class="paso-nota">En el asistente eliges el modelo de embeddings antes que Qdrant: Ollama gratis en tu equipo, o OpenAI, Gemini o Voyage. Quédate con uno: la memoria se vectoriza siempre con el mismo.</p>
         </li>
         <li>
