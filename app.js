@@ -505,6 +505,8 @@
       errPuerto.textContent = ok ? '' : 'Un número entre 1 y 65535.';
       if (!ok) return;
       $$('#panel-pc .v-puerto').forEach((e) => { e.textContent = String(n); });
+      // Con el 80 (el de siempre) el comando queda igual que sin la opción.
+      $$('#panel-pc .v-opt-puerto').forEach((e) => { e.textContent = n === 80 ? '' : `--puerto ${n} `; });
       $$('#panel-pc .v-url').forEach((e) => { e.textContent = n === 80 ? 'http://localhost' : `http://localhost:${n}`; });
     };
     campoPuerto.addEventListener('input', ponerPuerto);
