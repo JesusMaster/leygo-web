@@ -635,15 +635,16 @@
       try { if (abierto) { await sinTunel(id); } else { await conTunel(id); } } catch (e) { if (e !== 'cancelada') throw e; }
     });
     $('.tun-repetir', caja).addEventListener('click', ciclo);
-    $$('.proveedor-tunel button', caja).forEach((b) => b.addEventListener('click', () => {
+    $$('.proveedor-tunel button').forEach((b) => b.addEventListener('click', () => {
       prov = b.dataset.prov;
-      $$('.proveedor-tunel button', caja).forEach((x) => x.setAttribute('aria-checked', x === b));
+      $$('.proveedor-tunel button').forEach((x) => x.setAttribute('aria-checked', x.dataset.prov === prov));
       $('.tn-borde-nombre', caja).textContent = prov;
       $('.tn-url', caja).textContent = URLS[prov];
       for (const p of ['cloudflared', 'ngrok']) {
         $$(`.tun-texto-${p}, .tun-cmd-${p}`).forEach((el) => { el.hidden = p !== prov; });
       }
-      $('.tun-env').textContent = `A2A_BASE_URL=${URLS[prov]}\nPUBLIC_BASE_URL=${URLS[prov]}`;
+      $('.tun-env').textContent = `A2A_BASE_URL=${URLS[prov]}`;
+      $$('.tun-url-val').forEach((e) => { e.textContent = URLS[prov]; });
       requestAnimationFrame(dibujarT);
     }));
     let empezo = false;
