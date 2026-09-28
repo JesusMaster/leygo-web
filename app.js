@@ -523,4 +523,135 @@
   // ─── Enlaces a una pregunta: la abren ────────────────────────────────────
   const abrirPregunta = () => { const d = location.hash && document.querySelector(`details${location.hash}`); if (d) d.open = true; };
   addEventListener('hashchange', abrirPregunta); abrirPregunta();
+
+  // ─── Local: animación del túnel ──────────────────────────────────────────
+  (() => {
+    const caja = $('#tunel-demo');
+    if (!caja) return;
+    const esc = $('.tun-escenario', caja), lin = $('.tun-lineas', caja), nota = $('.tun-nota', caja);
+    const sw = $('.interruptor', caja), swTxt = $('.int-texto', caja), bloqueo = $('.tun-bloqueo', caja);
+    const URLS = { cloudflared: 'https://tu-agente.trycloudflare.com', ngrok: 'https://tu-agente.ngrok-free.app' };
+    let prov = 'cloudflared', abierto = false, token = 0, fueraT = false;
+    const P = {};
+    let paq;
+    const t = (id) => $(`[data-t="${id}"]`, esc);
+    const rel = (el) => { const r = el.getBoundingClientRect(), m = esc.getBoundingClientRect(); return { x: r.left - m.left, y: r.top - m.top, w: r.width, h: r.height }; };
+    const cen = (id) => { const r = rel($('i', t(id))); return { x: r.x + r.w / 2, y: r.y + r.h / 2 }; };
+    const codoT = (p, q) => {
+      if (Math.abs(q.x - p.x) >= Math.abs(q.y - p.y)) { const mx = (p.x + q.x) / 2; return `M${p.x},${p.y}H${mx}V${q.y}H${q.x}`; }
+      const my = (p.y + q.y) / 2; return `M${p.x},${p.y}V${my}H${q.x}V${q.y}`;
+    };
+    function muro() {
+      const b = rel($('.tun-caja', esc)), o = cen('otro');
+      if (o.x > b.x + b.w) return { x: b.x + b.w, y: Math.min(Math.max(o.y, b.y + 20), b.y + b.h - 20) };
+      return { x: Math.min(Math.max(o.x, b.x + 20), b.x + b.w - 20), y: b.y + b.h };
+    }
+    function dibujarT() {
+      lin.replaceChildren();
+      const L = cen('leygo'), S = cen('servicios'), B = cen('borde'), O = cen('otro'), M = muro();
+      const mk = (id, d, cls) => { const e = document.createElementNS(NS, 'path'); e.setAttribute('d', d); e.setAttribute('class', cls); lin.appendChild(e); P[id] = e; };
+      mk('sal', codoT(L, S), 't-cable');
+      mk('muro', `M${O.x},${O.y}L${M.x},${M.y}`, 't-muro');
+      mk('tubo', codoT(L, B), 't-tubo');
+      mk('borde', `M${O.x},${O.y}V${B.y}H${B.x}`, 't-cable'); // baja primero: no se confunde con el intento directo
+      paq = document.createElementNS(NS, 'circle'); paq.setAttribute('r', '8'); paq.setAttribute('class', 't-paquete'); paq.style.display = 'none'; lin.appendChild(paq);
+      const bw = bloqueo.offsetWidth, ew = esc.clientWidth;
+      bloqueo.style.left = Math.min(Math.max(M.x, bw / 2 + 6), ew - bw / 2 - 6) + 'px'; bloqueo.style.top = M.y + 'px';
+    }
+    const cancel = (id) => id !== token;
+    function esperar(ms, id, cada) {
+      return new Promise((ok, no) => {
+        let tt = 0, prev = performance.now();
+        const tick = (now) => {
+          if (cancel(id)) return no('cancelada');
+          const dt = now - prev; prev = now;
+          if (!fueraT) tt += Math.min(dt, 64);
+          const f = Math.min(tt / ms, 1); cada?.(f);
+          f >= 1 ? ok() : requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }
+    const marcar = (...ids) => $$('.tnodo', esc).forEach((n) => n.classList.toggle('activo', ids.includes(n.dataset.t)));
+    async function viaje(path, id, { inverso = false, hasta = 1, rebote = false } = {}) {
+      const len = path.getTotalLength();
+      paq.classList.toggle('rebote', rebote);
+      if (reducido) return;
+      paq.style.display = '';
+      await esperar(Math.max(500, Math.min(1100, len * 2.4 * hasta)), id, (f) => {
+        const k = suave(f) * hasta;
+        const pt = path.getPointAtLength(len * (inverso ? 1 - k : k));
+        paq.setAttribute('cx', pt.x); paq.setAttribute('cy', pt.y);
+      });
+      paq.style.display = 'none';
+    }
+    function ponerTunel(on) {
+      abierto = on;
+      caja.classList.toggle('abierto', on);
+      sw.setAttribute('aria-pressed', on);
+      swTxt.textContent = on ? 'Túnel abierto' : 'Túnel apagado';
+    }
+    const decir = (txt) => { nota.textContent = txt; };
+
+    async function sinTunel(id) {
+      ponerTunel(false); bloqueo.classList.remove('visible');
+      decir('Telegram, Google y los modelos funcionan sin nada más: es leygo el que sale a buscarlos.');
+      P.sal.classList.add('activo'); marcar('leygo');
+      await viaje(P.sal, id); marcar('servicios'); await esperar(250, id);
+      await viaje(P.sal, id, { inverso: true }); marcar('leygo'); P.sal.classList.remove('activo');
+      await esperar(700, id);
+      decir('Pero cuando el leygo de Camila intenta consultarte por A2A, no te encuentra: tu computador no tiene una dirección pública.');
+      marcar('otro');
+      await viaje(P.muro, id, { rebote: true, hasta: 0.96 });
+      bloqueo.classList.add('visible'); marcar();
+      await esperar(1900, id);
+      bloqueo.classList.remove('visible');
+    }
+    async function conTunel(id) {
+      bloqueo.classList.remove('visible');
+      decir(`Abres el túnel con ${prov}. Es una conexión de salida, así que no abres puertos en tu router, y te da una URL pública.`);
+      ponerTunel(true); marcar('leygo', 'borde');
+      await esperar(2200, id);
+      decir(`Ahora el leygo de Camila le escribe a ${URLS[prov]} con su token, y el túnel se lo entrega a tu leygo.`);
+      P.borde.classList.add('activo'); marcar('otro');
+      await viaje(P.borde, id); marcar('borde');
+      await viaje(P.tubo, id, { inverso: true }); marcar('leygo');
+      await esperar(500, id);
+      decir('Tu leygo responde por el mismo camino, con solo lo que ese token puede ver.');
+      await viaje(P.tubo, id); marcar('borde');
+      await viaje(P.borde, id, { inverso: true }); marcar('otro');
+      P.borde.classList.remove('activo');
+      await esperar(2400, id);
+    }
+    async function ciclo() {
+      const id = ++token;
+      try {
+        if (reducido) { ponerTunel(true); decir(`Con el túnel abierto (${prov}), tu leygo tiene una URL pública y otros agentes lo pueden consultar con un token.`); return; }
+        for (;;) { await sinTunel(id); await conTunel(id); }
+      } catch (e) { if (e !== 'cancelada') throw e; }
+    }
+    sw.addEventListener('click', async () => {
+      const id = ++token;
+      try { if (abierto) { await sinTunel(id); } else { await conTunel(id); } } catch (e) { if (e !== 'cancelada') throw e; }
+    });
+    $('.tun-repetir', caja).addEventListener('click', ciclo);
+    $$('.proveedor-tunel button', caja).forEach((b) => b.addEventListener('click', () => {
+      prov = b.dataset.prov;
+      $$('.proveedor-tunel button', caja).forEach((x) => x.setAttribute('aria-checked', x === b));
+      $('.tn-borde-nombre', caja).textContent = prov;
+      $('.tn-url', caja).textContent = URLS[prov];
+      for (const p of ['cloudflared', 'ngrok']) {
+        $$(`.tun-texto-${p}, .tun-cmd-${p}`).forEach((el) => { el.hidden = p !== prov; });
+      }
+      $('.tun-env').textContent = `A2A_BASE_URL=${URLS[prov]}\nPUBLIC_BASE_URL=${URLS[prov]}`;
+      requestAnimationFrame(dibujarT);
+    }));
+    let empezo = false;
+    new IntersectionObserver(([e]) => {
+      fueraT = !e.isIntersecting;
+      if (e.isIntersecting && !empezo) { empezo = true; dibujarT(); ciclo(); }
+    }, { threshold: .3 }).observe(caja);
+    let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(dibujarT, 120); });
+    (document.fonts?.ready || Promise.resolve()).then(dibujarT);
+  })();
 })();

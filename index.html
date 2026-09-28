@@ -14,9 +14,9 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/overpass-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=20260928e">
+  <link rel="stylesheet" href="styles.css?v=20260928f">
   <script>(function () { var d = document.documentElement; d.classList.add('js'); try { var t = localStorage.getItem('leygo-tema'); if (t === 'light' || t === 'dark') d.dataset.theme = t; } catch (e) {} })();</script>
-  <script src="app.js?v=20260928e" defer></script>
+  <script src="app.js?v=20260928f" defer></script>
 </head>
 <body>
   <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -264,7 +264,7 @@
     <section class="seccion seccion-a2a" id="adk-a2a" aria-labelledby="t-a2a">
       <div class="a2a-texto">
         <h2 id="t-a2a">Habla con otros agentes</h2>
-        <p>Hecho con el <a href="https://google.github.io/adk-docs/">ADK de Google</a> y abierto por <a href="https://a2a-protocol.org/">A2A</a>: otro agente le pregunta con un token que ve solo lo que tú eliges, y leygo también puede consultar a agentes de otros. <a href="#demo" data-ir-escena="a2a">Míralo en la demo</a>.</p>
+        <p>Hecho con el <a href="https://google.github.io/adk-docs/">ADK de Google</a> y abierto por <a href="https://a2a-protocol.org/">A2A</a>: otro agente le pregunta con un token que ve solo lo que tú eliges, y leygo también puede consultar a agentes de otros. Desde tu computador funciona con un <a href="#local">túnel</a>. <a href="#demo" data-ir-escena="a2a">Míralo en la demo</a>.</p>
       </div>
       <figure class="a2a-codigo">
         <figcaption>Un agente externo le pregunta a leygo</figcaption>
@@ -370,19 +370,64 @@
             <div class="terminal"><pre><code>cd leygo/ &amp;&amp; docker compose logs agent \
   | grep -A4 "configuración"</code></pre><button class="copiar" type="button">Copiar</button></div>
           </details>
-          <details>
-            <summary>A2A y webhooks con leygo en tu computador</summary>
-            <p>Para que otros agentes o Sentry te encuentren necesitas una URL pública. Ábrela con un túnel, <b>después de terminar el asistente</b>:</p>
-            <div class="terminal"><pre><code>cloudflared tunnel --url http://localhost:80
-# o con ngrok:
-# ngrok http --url=tu-agente.ngrok-free.app 80</code></pre><button class="copiar" type="button">Copiar</button></div>
-            <p>Agrega esa URL a <code>.env</code> y reinicia con <code>docker compose up -d --force-recreate agent</code>:</p>
-            <div class="terminal"><pre><code>A2A_BASE_URL=https://tu-agente.trycloudflare.com
-PUBLIC_BASE_URL=https://tu-agente.trycloudflare.com</code></pre><button class="copiar" type="button">Copiar</button></div>
-            <p>Luego crea un token en Conexiones A2A con solo las herramientas que quieras compartir.</p>
-          </details>
+          <p class="mas-enlace">¿Quieres que otros agentes o tus webhooks lleguen a tu computador? <a href="#local">Abre un túnel con cloudflared o ngrok</a>.</p>
         </div>
       </div>
+    </section>
+
+    <!-- ───────────── Túnel (A2A y webhooks en local) ───────────── -->
+    <section class="seccion seccion-local" id="local" aria-labelledby="t-local">
+      <div class="seccion-cabeza">
+        <h2 id="t-local">A2A y webhooks desde tu computador</h2>
+        <p>En tu computador casi todo funciona tal cual. Solo lo que llega desde internet, como otros agentes por A2A o los webhooks de Sentry, necesita una URL pública: la abres con un túnel.</p>
+      </div>
+
+      <div class="tunel" id="tunel-demo">
+        <div class="tunel-barra">
+          <button type="button" class="interruptor" aria-pressed="false"><span class="int-pista"><span class="int-bola"></span></span><span class="int-texto">Túnel apagado</span></button>
+          <div class="proveedor-tunel" role="radiogroup" aria-label="Herramienta de túnel">
+            <button type="button" role="radio" aria-checked="true" data-prov="cloudflared">cloudflared</button>
+            <button type="button" role="radio" aria-checked="false" data-prov="ngrok">ngrok</button>
+          </div>
+          <button type="button" class="tun-repetir">Ver de nuevo</button>
+        </div>
+        <div class="tun-escenario" aria-hidden="true">
+          <svg class="tun-lineas"></svg>
+          <div class="tun-caja"><span class="tun-caja-titulo">Tu computador</span>
+            <div class="tnodo tn-leygo" data-t="leygo"><i></i><span>leygo<small>en Docker</small></span></div>
+          </div>
+          <div class="tnodo tn-servicios" data-t="servicios"><i></i><span>Telegram, Google<br>y los modelos</span></div>
+          <div class="tnodo tn-borde" data-t="borde"><i></i><span class="tn-borde-nombre">cloudflared</span><span class="tn-url">https://tu-agente.trycloudflare.com</span></div>
+          <div class="tnodo tn-otro" data-t="otro"><i></i><span>El leygo de Camila<small>o cualquier agente A2A</small></span></div>
+          <span class="tun-bloqueo">Sin URL pública: no te encuentra</span>
+        </div>
+        <p class="tun-nota" aria-live="polite">Telegram, Google y los modelos funcionan sin nada más: es leygo el que sale a buscarlos.</p>
+      </div>
+
+      <ol class="pasos-local">
+        <li>
+          <h3>Abre un túnel, solo si vas a usar A2A o webhooks</h3>
+          <p class="aviso-seguridad"><b>Termina el asistente antes de abrirlo.</b> Hasta que no creas tu cuenta la administración está cerrada, pero conviene que la URL pública llegue a un leygo que ya pide contraseña.</p>
+          <p class="tun-texto-cloudflared">Te da una URL <code>https://….trycloudflare.com</code> que cambia cada vez que lo inicias. Para una fija, crea un túnel con nombre en Cloudflare y apúntalo a tu dominio.</p>
+          <p class="tun-texto-ngrok" hidden>Te da una URL <code>https://….ngrok-free.app</code>. Tu cuenta gratis de ngrok incluye un dominio fijo: úsalo con <code>--url</code> para que no cambie.</p>
+          <div class="terminal tun-cmd-cloudflared"><pre><code>cloudflared tunnel --url http://localhost:80</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <div class="terminal tun-cmd-ngrok" hidden><pre><code>ngrok http --url=tu-agente.ngrok-free.app 80</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <p class="paso-nota">Si instalaste con <code>--puerto</code>, cambia el 80 por ese puerto.</p>
+        </li>
+        <li>
+          <h3>Dile a leygo cuál es su URL pública</h3>
+          <p>Su tarjeta A2A anuncia esa dirección: si no coincide con la del túnel, los otros agentes no llegan.</p>
+          <div class="terminal"><pre><code class="tun-env">A2A_BASE_URL=https://tu-agente.trycloudflare.com
+PUBLIC_BASE_URL=https://tu-agente.trycloudflare.com</code></pre><button class="copiar" type="button">Copiar</button></div>
+          <p class="paso-nota">Agrégalas a <code>.env</code> y reinicia con <code>docker compose up -d --force-recreate agent</code>.</p>
+        </li>
+        <li>
+          <h3>Crea un token y compártelo</h3>
+          <p>En Conexiones A2A, con solo las herramientas que quieras. Quien lo use necesita tu URL y ese token.</p>
+          <p class="paso-nota">¿Conectaste Google desde <code>http://localhost</code>? Esa dirección de retorno sirve igual; si entras por la URL del túnel, agrégala también en Google Cloud.</p>
+        </li>
+      </ol>
+      <p class="local-avisos">El túnel funciona mientras tu computador esté prendido. Y deja una sola copia de leygo encendida: si también lo tienes en un servidor, apaga una, o Telegram y las rutinas responderían dos veces.</p>
     </section>
 
     <!-- ───────────── Preguntas ───────────── -->
