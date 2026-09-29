@@ -11,6 +11,7 @@ fonts/         Overpass y Overpass Mono (OFL), servidas desde el mismo dominio
 img/           capturas reales de la GUI (chat, compromisos, agentes, memoria) en claro y oscuro
 favicon.svg    logo de leygo (se adapta a modo oscuro)
 og.png         imagen para compartir en redes (1200×630)
+business/      leygo.cl/business: cuenta empresa (precios, prueba gratis y compra contra licencias.leygo.cl)
 ```
 
 ## Verlo en local
