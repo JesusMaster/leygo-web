@@ -596,6 +596,18 @@ html:not(.js) .donde { display: none; }
 }
 @media (max-width: 480px) { .donde { display: flex; } .donde button { flex: 1; justify-content: center; padding: 12px 8px 10px; font-size: 15px; gap: 7px; } .donde svg { width: 19px; height: 19px; } }
 
+/* Sistema del computador: macOS / Linux o Windows. Sin JS se ven los dos comandos. */
+.so { display: inline-flex; align-items: center; gap: 2px; min-width: 0; }
+.so::before { content: ''; flex-shrink: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--noche-leygo); box-shadow: 15px 0 0 rgba(255, 255, 255, .18), 30px 0 0 rgba(255, 255, 255, .18); margin-right: 40px; }
+.so button { font: 600 13px/1 var(--f-mono); border: 0; border-radius: 7px; padding: 8px 10px 6px; background: transparent; color: var(--noche-tinta-2); cursor: pointer; white-space: nowrap; transition: background-color .2s, color .2s; }
+.so button:hover { color: var(--noche-tinta); }
+.so button[aria-selected="true"] { background: rgba(255, 255, 255, .1); color: var(--noche-tinta); }
+.so button:focus-visible { outline: 3px solid var(--noche-leygo); outline-offset: 1px; }
+html:not(.js) .so { visibility: hidden; }
+html:not(.js) .pasos-inst .so-win { display: block; margin-top: 8px; }
+.js .instalar:not([data-so="win"]) .so-win, .js .instalar[data-so="win"] .so-unix { display: none; }
+@media (max-width: 480px) { .so::before { display: none; } .so button { padding: 8px 8px 6px; font-size: 12.5px; } }
+
 /* Puerto elegido en "En tu computador" */
 .puerto-campo { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 12px; }
 .puerto-campo label { font-size: 15px; font-weight: 700; color: var(--noche-tinta); }

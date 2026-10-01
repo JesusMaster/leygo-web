@@ -14,9 +14,9 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/overpass-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=20260928g">
+  <link rel="stylesheet" href="styles.css?v=20261001a">
   <script>(function () { var d = document.documentElement; d.classList.add('js'); try { var t = localStorage.getItem('leygo-tema'); if (t === 'light' || t === 'dark') d.dataset.theme = t; } catch (e) {} })();</script>
-  <script src="app.js?v=20260928g" defer></script>
+  <script src="app.js?v=20261001a" defer></script>
 </head>
 <body>
   <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -326,13 +326,21 @@
           <ol class="pasos-inst">
             <li><b>Elige el puerto</b> de la interfaz: 80 si está libre; si ya lo usa otra cosa, prueba 8080.
               <span class="puerto-campo"><label for="puerto">Puerto</label><input id="puerto" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" value="80" autocomplete="off" aria-describedby="puerto-error"><span id="puerto-error" class="puerto-error" aria-live="polite"></span></span></li>
-            <li><b>Abre Docker</b> y corre el comando en tu terminal.</li>
+            <li><span class="so-unix"><b>Abre Docker</b> y corre el comando en tu terminal.</span><span class="so-win"><b>Abre Docker Desktop</b> (con WSL 2) y corre el comando en PowerShell.</span></li>
             <li><b>Entra a <code class="v-url">http://localhost</code></b> y escribe el código que te muestra. El asistente hace el resto.</li>
           </ol>
           <div class="ventana">
-            <div class="ventana-barra"><span class="ventana-titulo">Terminal</span><button class="copiar" type="button">Copiar</button></div>
-            <pre class="ventana-cmd"><span class="prompt" aria-hidden="true">$ </span><code>curl -fsSL https://leygo.cl/instalar.sh \
+            <div class="ventana-barra">
+              <div class="so" role="tablist" aria-label="Sistema de tu computador">
+                <button type="button" role="tab" id="so-tab-unix" data-so="unix" aria-controls="so-cmd-unix" aria-selected="true">macOS / Linux</button>
+                <button type="button" role="tab" id="so-tab-win" data-so="win" aria-controls="so-cmd-win" aria-selected="false" tabindex="-1">Windows</button>
+              </div>
+              <button class="copiar" type="button">Copiar</button>
+            </div>
+            <pre class="ventana-cmd so-unix" id="so-cmd-unix" role="tabpanel" aria-labelledby="so-tab-unix"><span class="prompt" aria-hidden="true">$ </span><code>curl -fsSL https://leygo.cl/instalar.sh \
   | bash -s -- <span class="v-opt-puerto"></span>--redis --qdrant</code></pre>
+            <pre class="ventana-cmd so-win" id="so-cmd-win" role="tabpanel" aria-labelledby="so-tab-win"><span class="prompt" aria-hidden="true">PS&gt; </span><code>&amp; ([scriptblock]::Create((irm https://leygo.cl/instalar.ps1))) `
+  <span class="v-opt-puerto-win"></span>-Redis -Qdrant</code></pre>
             <pre class="salida" aria-label="Lo que verás al terminar"><span style="--i:0">Descargando la instalación de leygo…</span><span style="--i:1">Servicios:</span><span style="--i:2">  • Redis   → en Docker</span><span style="--i:3">  • Qdrant  → en Docker</span><span style="--i:4">  • Puerto  → <span class="v-puerto">80</span></span><span style="--i:5">Descargando leygo…</span><span style="--i:6" class="ok">Listo. Abre <b class="v-url">http://localhost</b></span><span style="--i:7">Esperando que leygo arranque.....</span><span style="--i:8" class="codigo">Código de configuración: <b>K7TD-M4QA</b></span></pre>
           </div>
         </div>
@@ -357,19 +365,29 @@
           <details>
             <summary>Opciones del instalador</summary>
             <p>Dentro de la carpeta <code>leygo</code>:</p>
-            <div class="terminal opciones" role="list" aria-label="Opciones de instalar.sh">
+            <div class="terminal opciones so-unix" role="list" aria-label="Opciones de instalar.sh">
               <div class="op" role="listitem"><code>./instalar.sh</code><span class="com"># actualiza, con la misma selección</span></div>
               <div class="op" role="listitem"><code>./instalar.sh --todo</code><span class="com"># Redis, Qdrant y Ollama en Docker</span></div>
               <div class="op" role="listitem"><code>./instalar.sh --ninguno</code><span class="com"># usa los que ya tienes</span></div>
               <div class="op" role="listitem"><code>./instalar.sh --puerto 8080</code><span class="com"># en http://localhost:8080</span></div>
             </div>
+            <div class="terminal opciones so-win" role="list" aria-label="Opciones de instalar.ps1 (Windows)">
+              <div class="op" role="listitem"><code>.\instalar.ps1</code><span class="com"># actualiza, con la misma selección</span></div>
+              <div class="op" role="listitem"><code>.\instalar.ps1 -Todo</code><span class="com"># Redis, Qdrant y Ollama en Docker</span></div>
+              <div class="op" role="listitem"><code>.\instalar.ps1 -Ninguno</code><span class="com"># usa los que ya tienes</span></div>
+              <div class="op" role="listitem"><code>.\instalar.ps1 -Puerto 8080</code><span class="com"># en http://localhost:8080</span></div>
+            </div>
             <p>¿Un segundo leygo en el mismo equipo? Otra carpeta y otro puerto:</p>
-            <div class="terminal"><pre><code>curl -fsSL https://leygo.cl/instalar.sh \
+            <div class="terminal so-unix"><pre><code>curl -fsSL https://leygo.cl/instalar.sh \
   | bash -s -- --carpeta leygo-2 \
     --puerto 8080 --redis --qdrant</code></pre><button class="copiar" type="button">Copiar</button></div>
+            <div class="terminal so-win"><pre><code>&amp; ([scriptblock]::Create((irm https://leygo.cl/instalar.ps1))) `
+  -Carpeta leygo-2 -Puerto 8080 -Redis -Qdrant</code></pre><button class="copiar" type="button">Copiar</button></div>
             <p>¿Perdiste el código de configuración?</p>
-            <div class="terminal"><pre><code>cd leygo/ &amp;&amp; docker compose logs agent \
+            <div class="terminal so-unix"><pre><code>cd leygo/ &amp;&amp; docker compose logs agent \
   | grep -A4 "configuración"</code></pre><button class="copiar" type="button">Copiar</button></div>
+            <div class="terminal so-win"><pre><code>cd leygo; docker compose logs agent `
+  | Select-String -Context 0,4 "configuraci"</code></pre><button class="copiar" type="button">Copiar</button></div>
           </details>
           <p class="mas-enlace">¿Quieres que otros agentes o tus webhooks lleguen a tu computador? <a href="#local">Abre un túnel con cloudflared o ngrok</a>.</p>
         </div>

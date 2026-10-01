@@ -393,7 +393,11 @@
 
   // ─── Copiar comandos ─────────────────────────────────────────────────────
   $$('.copiar').forEach((b) => b.addEventListener('click', async () => {
-    const texto = (b.closest('.ventana')?.querySelector('.ventana-cmd code') || b.previousElementSibling).textContent;
+    // En la ventana con dos comandos (macOS / Linux y Windows) se copia el que está a la vista.
+    const ventana = b.closest('.ventana');
+    const fuente = ventana ? ($$('.ventana-cmd code', ventana).find((c) => c.getClientRects().length) || $('.ventana-cmd code', ventana)) : b.previousElementSibling;
+    // PowerShell: lo que sigue a un ` va en la misma línea, así se pega sin el aviso de "varias líneas".
+    const texto = fuente.textContent.replace(/ `\n\s*/g, ' ');
     try { await navigator.clipboard.writeText(texto); b.textContent = 'Copiado'; }
     catch { b.textContent = 'Selecciona y copia'; }
     b.classList.add('listo');
@@ -473,6 +477,30 @@
   // ─── Enlaces que abren una escena de la demo ─────────────────────────────
   $$('[data-ir-escena]').forEach((a) => a.addEventListener('click', () => reproducir(a.dataset.irEscena)));
 
+  // ─── Instalar: macOS / Linux o Windows ───────────────────────────────────
+  // Parte en el sistema del visitante. "En un servidor" es Linux: con esa pestaña, las opciones
+  // de abajo se muestran como en Linux aunque se haya elegido Windows.
+  const seccionInstalar = $('#instalar');
+  const so = $$('.so [role="tab"]');
+  const plataforma = navigator.userAgentData?.platform || navigator.platform || navigator.userAgent;
+  let soElegido = /^win/i.test(plataforma) ? 'win' : 'unix';
+  function aplicarSo() {
+    if (!seccionInstalar) return;
+    const enServidor = $('#tab-srv')?.getAttribute('aria-selected') === 'true';
+    seccionInstalar.dataset.so = enServidor ? 'unix' : soElegido;
+    so.forEach((x) => { const on = x.dataset.so === soElegido; x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1; });
+  }
+  so.forEach((b, i) => {
+    b.addEventListener('click', () => { soElegido = b.dataset.so; aplicarSo(); });
+    b.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      const k = (i + (e.key === 'ArrowRight' ? 1 : so.length - 1)) % so.length;
+      so[k].focus(); soElegido = so[k].dataset.so; aplicarSo();
+    });
+  });
+  aplicarSo();
+
   // ─── Instalar: en tu computador / en un servidor ─────────────────────────
   // Sin JS se ven los dos paneles (y no las pestañas); con JS, uno a la vez.
   const donde = $$('.donde [role="tab"]');
@@ -482,6 +510,7 @@
       x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1;
       document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
     });
+    aplicarSo();
   }
   donde.forEach((b, i) => {
     b.addEventListener('click', () => mostrarDonde(b));
@@ -507,6 +536,7 @@
       $$('#panel-pc .v-puerto').forEach((e) => { e.textContent = String(n); });
       // Con el 80 (el de siempre) el comando queda igual que sin la opción.
       $$('#panel-pc .v-opt-puerto').forEach((e) => { e.textContent = n === 80 ? '' : `--puerto ${n} `; });
+      $$('#panel-pc .v-opt-puerto-win').forEach((e) => { e.textContent = n === 80 ? '' : `-Puerto ${n} `; });
       $$('#panel-pc .v-url').forEach((e) => { e.textContent = n === 80 ? 'http://localhost' : `http://localhost:${n}`; });
     };
     campoPuerto.addEventListener('input', ponerPuerto);

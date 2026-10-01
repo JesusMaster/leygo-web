@@ -39,10 +39,11 @@ bajar docker-compose.yml docker-compose.yml
 bajar instalar.sh instalar.sh
 bajar .env.example .env.example
 bajar deploy/Caddyfile deploy/Caddyfile
+bajar deploy/actualizador.sh deploy/actualizador.sh
 bajar LICENCIA.txt LICENCIA.txt
 bajar README.md README.md
 [ -f config/channels.json ] || bajar config/channels.json config/channels.json
-chmod +x instalar.sh
+chmod +x instalar.sh deploy/actualizador.sh
 
 if [ $nuevo = 1 ]; then
   echo
@@ -52,4 +53,5 @@ if [ $nuevo = 1 ]; then
 fi
 
 # Sin terminal (curl | bash) el instalador no necesita preguntar nada: todo va por opciones.
-exec ./instalar.sh ${args[@]+"${args[@]}"}
+# Los archivos recién bajados: ./instalar.sh no necesita volver a descargarlos.
+LEYGO_SIN_DESCARGA=1 exec ./instalar.sh ${args[@]+"${args[@]}"}
